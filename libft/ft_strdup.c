@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/18 10:31:32 by jerrok            #+#    #+#             */
-/*   Updated: 2022/04/19 11:04:16 by jerrok           ###   ########.fr       */
+/*   Created: 2021/10/18 13:21:52 by jerrok            #+#    #+#             */
+/*   Updated: 2021/10/26 12:23:59 by jerrok           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
+#include <stdio.h>
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <signal.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include "./libft/libft.h"
+char	*ft_strdup(char *src)
+{
+	char	*str;
+	int		i;
 
-void	choose_func(char **str);
-void	echo(char **str);
-
-#endif
+	i = 0;
+	str = malloc(sizeof(char) * ft_strlen(src) + 1);
+	if (!str)
+		return (str);
+	while (src[i] != '\0')
+	{
+		str[i] = src[i];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
+}

@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/18 10:31:32 by jerrok            #+#    #+#             */
-/*   Updated: 2022/04/19 11:04:16 by jerrok           ###   ########.fr       */
+/*   Created: 2021/10/12 13:40:52 by jerrok            #+#    #+#             */
+/*   Updated: 2021/10/27 11:51:30 by jerrok           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <signal.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include "./libft/libft.h"
+void	*ft_memcpy(char *dest, const char *src, size_t size)
+{
+	size_t	i;
 
-void	choose_func(char **str);
-void	echo(char **str);
-
-#endif
+	i = 0;
+	if (!(!src && !dest))
+	{
+		while (i < size && size)
+		{
+			dest[i] = src[i];
+			i++;
+		}
+	}
+	return (dest);
+}
