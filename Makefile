@@ -6,8 +6,10 @@ CFLAGS = -Wall -Werror -Wextra
 	$(CC) $(CFLAGS) -c $< -o $@
 
 SRCS =	main.c\
+		parse.c\
+		echo.c\
 
-OBJS = $(SRCS:.c=.o)
+OBJS = $(SRCS:.c=.o) ./libft/libft.a
 
 all: $(NAME)
 

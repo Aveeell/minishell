@@ -1,28 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/18 10:31:32 by jerrok            #+#    #+#             */
-/*   Updated: 2022/04/19 11:04:16 by jerrok           ###   ########.fr       */
+/*   Created: 2021/10/12 13:40:54 by jerrok            #+#    #+#             */
+/*   Updated: 2021/10/27 14:44:01 by jerrok           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <signal.h>
-# include <unistd.h>
-# include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include "./libft/libft.h"
+void	*ft_memmove(void *dest, const void *src, size_t size)
+{
+	const char	*s;
+	const char	*ls;
+	char		*d;
+	char		*ld;
 
-void	choose_func(char **str);
-void	echo(char **str);
-
-#endif
+	s = src;
+	d = dest;
+	if (!(!src && !dest))
+	{
+		if (d < s)
+		{
+			while (size--)
+				*d++ = *s++;
+		}
+		else
+		{
+			ls = s + (size - 1);
+			ld = d + (size - 1);
+			while (size--)
+				*ld-- = *ls--;
+		}
+	}
+	return (dest);
+}
