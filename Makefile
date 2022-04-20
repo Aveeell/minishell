@@ -20,7 +20,7 @@ $(NAME): $(OBJS)
 	cp $(LIBFT) $(NAME)
 	$(CC) $(CFLAGS) -lreadline $(OBJS) -o $(NAME)
 
-$(OBJS): minishell.h Makefile ./libft/*.c ./libft/*.h ./libft/Makefile #??
+$(OBJS): minishell.h Makefile ./libft/*.c ./libft/*.h ./libft/Makefile
 
 clean:
 	$(MAKE) clean -C ./libft
