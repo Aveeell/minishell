@@ -6,7 +6,7 @@
 /*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 10:31:32 by jerrok            #+#    #+#             */
-/*   Updated: 2022/04/19 12:27:14 by jerrok           ###   ########.fr       */
+/*   Updated: 2022/04/22 12:43:42 by jerrok           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,10 @@
 # include <readline/history.h>
 # include "./libft/libft.h"
 
-void	choose_func(char **str);
+void	choose_func(char **str, char **envp);
 void	echo(char **str);
 void	pwd(void);
+void	unset(char **str);
+void	env(char **envp);
 
 #endif

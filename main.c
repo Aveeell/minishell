@@ -6,22 +6,24 @@
 /*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 10:31:39 by jerrok            #+#    #+#             */
-/*   Updated: 2022/04/19 11:59:39 by jerrok           ###   ########.fr       */
+/*   Updated: 2022/04/22 10:49:22 by jerrok           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int main()
+int main(int argc, char **argv, char **envp)
 {
+	(void)argc;
+	(void)argv;
 	char *input;
 	char **split_input;
-	
+
 	while(1)
 	{
 		input = readline("minishell> ");
 		split_input = ft_split(input, ' ');
-		choose_func(split_input);
+		choose_func(split_input, envp);
 		
 		add_history(input);
 		for(int i = 0; split_input[i]; i++)
