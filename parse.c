@@ -6,31 +6,46 @@
 /*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 10:45:52 by jerrok            #+#    #+#             */
-/*   Updated: 2022/04/19 12:11:49 by jerrok           ###   ########.fr       */
+/*   Updated: 2022/04/22 14:35:51 by jerrok           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	choose_func(char **str)
+void	cd(char **str)
 {
-	char *env;
+	int	i;
+	char	*dest;
+	
+	i = 1;
+	dest = str[1];
+	if (str[i + 1])
+	{
+		while (str[i + 1])
+		{
+			dest = ft_strjoin(ft_strjoin(dest, " "), str[i + 1]);
+			i++;
+		}
+	}
+	if (chdir(dest) == -1)
+		printf("%s: No such file or directory\n", str[1]);
+	free(dest);
+}
 
+void	choose_func(char **str, char **envp)
+{
 	if(!ft_strcmp(str[0], "echo"))
 		echo(str);
 	else if(!ft_strcmp(str[0], "cd"))
-		chdir(str[1]);
+		cd(str);
 	else if(!ft_strcmp(str[0], "pwd"))
 		pwd();
 	else if(!ft_strcmp(str[0], "export"))
-		printf("export\n");
+		printf("export\n"); //execve??????????????????
 	else if(!ft_strcmp(str[0], "unset"))
-		printf("unset\n");
+		unset(str);
 	else if(!ft_strcmp(str[0], "env"))
-	{
-		env = getenv("USER");
-		printf("%s\n", env);
-	}
+		env(envp);
 	else if (!ft_strcmp(str[0], "exit"))
 		exit(0);
 	else
