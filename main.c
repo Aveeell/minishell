@@ -6,7 +6,7 @@
 /*   By: mkoch <mkoch@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 10:31:39 by jerrok            #+#    #+#             */
-/*   Updated: 2022/04/25 15:54:39 by mkoch            ###   ########.fr       */
+/*   Updated: 2022/04/22 10:49:22 by jerrok           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int main(int argc, char **argv, char **envp)
 	(void)argv;
 	char *input;
 	char **split_input;
-	
+
 	while(1)
 	{
 		input = readline("minishell> ");

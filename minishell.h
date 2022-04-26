@@ -6,7 +6,7 @@
 /*   By: mkoch <mkoch@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 10:31:32 by jerrok            #+#    #+#             */
-/*   Updated: 2022/04/25 15:36:38 by mkoch            ###   ########.fr       */
+/*   Updated: 2022/04/22 12:43:42 by jerrok           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,7 @@ void	echo(char **str);
 void	pwd(void);
 int		binary_exec(char **split_input, char **envp);
 // int		signals(int signal);
+void	unset(char **str);
+void	env(char **envp);
 
 #endif
