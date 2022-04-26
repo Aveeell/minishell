@@ -6,13 +6,13 @@
 /*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 10:45:25 by jerrok            #+#    #+#             */
-/*   Updated: 2022/04/22 14:10:43 by jerrok           ###   ########.fr       */
+/*   Updated: 2022/04/25 12:04:52 by jerrok           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pwd(void) //убрал маллок, сделал статический массив, исчезла необходимость маллок проверять
+void	pwd(void)
 {
 	char pwd[1024];
 
@@ -22,19 +22,26 @@ void	pwd(void) //убрал маллок, сделал статический м
 
 static void	print_echo(char **str, int i, int flag)
 {
+	// if (!ft_strcmp(str[i], "-n"))
+	// 	return ;
+	// if (((i > 1 && flag != 0) || (i > 3 && !flag)) && str[i + 1] &&\
+	// 	ft_strcmp(str[i - 1], "-n") && ft_strcmp(str[i - 1], "-n"))
+	// 	printf(" ");
 	if(str[i][0] == '$')
+	{	
+		if (!getenv(&str[i][1]))
+			return;
 		printf("%s", getenv(&str[i][1]));
-	else
-	{
-		printf("%s", str[i]);
-		if (str[i + 1])
-			printf(" ");
 	}
+	else
+		printf("%s", str[i]);
+	if (str[i + 1])
+		printf(" ");
 	if (!str[i + 1] && flag != 0)
 		printf("\n");
 }
 
-void	echo(char **str) // echo $PATH PATH $PATH
+void	echo(char **str)
 {
 	int	i;
 	int	flag;
@@ -49,12 +56,14 @@ void	echo(char **str) // echo $PATH PATH $PATH
 		return ;
 	}
 	else
+	{
+		while(!ft_strcmp(str[i], "-n"))
+			i++;
 		while (str[i])
 		{
 			print_echo(str, i++, flag);
-			if (str[i + 1])
-				printf(" ");
 		}
+	}
 }
 
 void	unset(char **str)

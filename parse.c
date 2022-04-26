@@ -6,7 +6,7 @@
 /*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 10:45:52 by jerrok            #+#    #+#             */
-/*   Updated: 2022/04/22 14:35:51 by jerrok           ###   ########.fr       */
+/*   Updated: 2022/04/22 15:22:05 by jerrok           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	cd(char **str)
 void	choose_func(char **str, char **envp)
 {
 	if(!ft_strcmp(str[0], "echo"))
-		echo(str);
+		echo(str); // -n -n -n
 	else if(!ft_strcmp(str[0], "cd"))
 		cd(str);
 	else if(!ft_strcmp(str[0], "pwd"))
