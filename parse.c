@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: mkoch <mkoch@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 10:45:52 by jerrok            #+#    #+#             */
 /*   Updated: 2022/04/22 15:22:05 by jerrok           ###   ########.fr       */
@@ -11,6 +11,12 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
+void	choose_func(char **str, char **envp)
+{
+	//(void)envp;
+	char *env;
 
 void	cd(char **str)
 {
@@ -45,9 +51,19 @@ void	choose_func(char **str, char **envp)
 	else if(!ft_strcmp(str[0], "unset"))
 		unset(str);
 	else if(!ft_strcmp(str[0], "env"))
+
+	{
+		env = getenv("USER");
+		printf("%s\n", env);
+	}
+	// else if(str[0][0] == -1)
+	// 	printf("keks");
+
 		env(envp);
 	else if (!ft_strcmp(str[0], "exit"))
 		exit(0);
 	else
-		printf("wrong command\n");
+		binary_exec(str, envp);
+	// else
+	// 	printf("wrong command\n");
 }

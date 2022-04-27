@@ -10,6 +10,8 @@ CFLAGS = -Wall -Werror -Wextra
 SRCS =	main.c\
 		parse.c\
 		programs.c\
+		binary.c\
+		# signals.c\
 
 OBJS = $(SRCS:.c=.o) ./libft/libft.a
 

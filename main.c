@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: mkoch <mkoch@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 10:31:39 by jerrok            #+#    #+#             */
 /*   Updated: 2022/04/25 12:40:40 by jerrok           ###   ########.fr       */
@@ -38,6 +38,8 @@ int main(int argc, char **argv, char **envp)
 	while(1)
 	{
 		input = readline("minishell> ");
+		if (!input)
+			exit(0);
 		split_input = ft_split(input, ' ');
 		command = get_command(input);
 		printf("\n-------\ncommand - %s\n------\n", command);
