@@ -6,7 +6,7 @@
 /*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 10:45:25 by jerrok            #+#    #+#             */
-/*   Updated: 2022/04/25 12:38:38 by jerrok           ###   ########.fr       */
+/*   Updated: 2022/04/27 12:22:40 by jerrok           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,31 +39,35 @@ static void	print_echo(char **str, int i, int flag)
 		printf(" ");
 	if (!str[i + 1] && flag != 0)
 		printf("\n");
+	free(str[i]);
 }
 
-void	echo(char **str)
+void	echo(char *str)
 {
 	int	i;
 	int	flag;
+	char **split_str;
 
-	flag = ft_strcmp(str[1], "-n");
+	split_str = ft_split(str, ' ');
+	flag = ft_strcmp(split_str[1], "-n");
 	if (flag == 0)
 		i = 2;
 	i = 1;
-	if (!str[1])
+	if (!split_str[1])
 	{
 		printf("\n");
 		return ;
 	}
 	else
 	{
-		while(!ft_strcmp(str[i], "-n"))
+		while(!ft_strcmp(split_str[i], "-n"))
 			i++;
-		while (str[i])
+		while (split_str[i])
 		{
-			print_echo(str, i++, flag);
+			print_echo(split_str, i++, flag);
 		}
 	}
+	free(split_str);
 }
 
 void	unset(char **str)

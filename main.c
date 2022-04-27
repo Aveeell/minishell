@@ -3,53 +3,81 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkoch <mkoch@student.21-school.ru>         +#+  +:+       +#+        */
+/*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 10:31:39 by jerrok            #+#    #+#             */
-/*   Updated: 2022/04/25 12:40:40 by jerrok           ###   ########.fr       */
+/*   Updated: 2022/04/27 11:51:57 by jerrok           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *get_command(char *str)
+void	get_struct(t_str *str, char *input)
 {
-	int i = 0;
-	char *command;
+	int i;
 
-	while (str[i] != ' ')
+	i = 0;
+	str->signle_q = 0;
+	str->double_q = 0;
+	str->input = input;
+	str->split_pipe = ft_split(input, '|');
+	while(str->split_pipe[i++])
+		str->split_pipe[i] = ft_strtrim(str->split_pipe[i], " ");
+	i = 0;
+	while(str->input[i])
+	{
+		if (str->input[i] == '\'')
+			str->signle_q++;
+		if (str->input[i] == '\"')
+			str->double_q++;
+		if (str->input[i] == '|')
+			str->pipes++;
 		i++;
-	command = ft_calloc(i, 1);
-	if (!command)
-		return NULL;
-	while (i--)
-		command[i] = str[i];
-	return command;
+	}
+}
+
+void	free_struct(t_str *str)
+{
+	int i;
+
+	i = 0;
+	if (str->split_pipe)
+		while (str->split_pipe[i])
+			free(str->split_pipe[i++]);
+	free(str->input);
 }
 
 int main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	char *input;
+	t_str	str;
 	char **split_input;
-	char *command;
+	// char *command;
 	
 	while(1)
 	{
-		input = readline("minishell> ");
-		if (!input)
+		get_struct(&str, readline("minishell> "));
+		// str.input = readline("minishell> ");
+		if (!str.input)
 			exit(0);
-		split_input = ft_split(input, ' ');
-		command = get_command(input);
-		printf("\n-------\ncommand - %s\n------\n", command);
-		choose_func(split_input, envp);
+		split_input = ft_split(str.input, ' ');
+		// command = get_command(str.input);
+		// printf("-------\ncommand - %s\n------\n", command);
+		choose_func(&str, envp);
+		// choose_func(split_input, envp);
 		
-		add_history(input);
+		add_history(str.input);
 		for(int i = 0; split_input[i]; i++)
 			free(split_input[i]);
 		free(split_input);
-		free(input);
+		// free(input);
+		printf("\n-----\nsingle - %d, double - %d, pipes - %d\ninput - %s\n",
+		str.signle_q, str.double_q, str.pipes, str.input);
+		for (int i = 0; str.split_pipe[i]; i++)
+			printf("split_pipe[%d] - %s\n", i, str.split_pipe[i]);
+		printf("------\n");
+		free_struct(&str);
 	}
 	return 0;
 }

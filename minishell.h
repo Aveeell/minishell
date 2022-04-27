@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkoch <mkoch@student.21-school.ru>         +#+  +:+       +#+        */
+/*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 10:31:32 by jerrok            #+#    #+#             */
-/*   Updated: 2022/04/22 12:43:42 by jerrok           ###   ########.fr       */
+/*   Updated: 2022/04/27 13:20:43 by jerrok           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,22 @@
 # include "./libft/libft.h"
 # include <dirent.h>
 
-void	choose_func(char **str, char **envp);
-void	echo(char **str);
+typedef struct	s_str
+{
+	char	*input;
+	char	**split_pipe;
+	int		signle_q;
+	int		double_q;
+	int		pipes;
+}				t_str;
+
+// void	choose_func(char **str, char **envp);
+void	choose_func(t_str *str, char **envp);
+void	echo(char *str);
 void	pwd(void);
-int		binary_exec(char **split_input, char **envp);
+// int		binary_exec(char **split_input, char **envp);
+int binary_exec(char *input, char **envp);
+
 // int		signals(int signal);
 void	unset(char **str);
 void	env(char **envp);
