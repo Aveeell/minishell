@@ -57,8 +57,8 @@ void	choose_func(t_str *str, char **envp)
 	i = 0;
 	// for (int i = 0; ft_strchr(str->input, ' ')[i]; i++)
 	// 	printf("%c\n", ft_strchr(str->input, ' ')[i]);
-	while (str->split_pipe[i])
-	{
+	//while (str->split_pipe[i])
+	//{
 		command = get_command(str->split_pipe[i]);
 		// printf("arg - %s\n", ft_strchr(str->input, ' '));
 		if(!ft_strcmp(command, "echo"))
@@ -79,6 +79,6 @@ void	choose_func(t_str *str, char **envp)
 			binary_exec(str->split_pipe[i], envp);
 		// else
 		// 	printf("wrong command\n");
-		i++;
-	}
+		//i++;
+	//}
 }
