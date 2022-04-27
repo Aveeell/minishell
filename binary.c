@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   binary.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkoch <mkoch@student.21-school.ru>         +#+  +:+       +#+        */
+/*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 12:36:44 by mkoch             #+#    #+#             */
-/*   Updated: 2022/04/25 15:18:37 by mkoch            ###   ########.fr       */
+/*   Updated: 2022/04/27 13:20:52 by jerrok           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int binary_exec(char **split_input, char **envp)
+int binary_exec(char *input, char **envp)
 {
 	(void)envp;
 	char 			*command;
@@ -24,6 +24,8 @@ int binary_exec(char **split_input, char **envp)
 	char			bin_dir[1024];
 	char 			*bin_file;
 	int				i;
+
+	char **split_input = ft_split(input, ' ');
 
 	command = split_input[0];
 	getcwd(source_dir, 1024);
