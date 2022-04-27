@@ -6,11 +6,26 @@
 /*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 10:31:39 by jerrok            #+#    #+#             */
-/*   Updated: 2022/04/22 10:49:22 by jerrok           ###   ########.fr       */
+/*   Updated: 2022/04/25 12:40:40 by jerrok           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char *get_command(char *str)
+{
+	int i = 0;
+	char *command;
+
+	while (str[i] != ' ')
+		i++;
+	command = ft_calloc(i, 1);
+	if (!command)
+		return NULL;
+	while (i--)
+		command[i] = str[i];
+	return command;
+}
 
 int main(int argc, char **argv, char **envp)
 {
@@ -18,11 +33,14 @@ int main(int argc, char **argv, char **envp)
 	(void)argv;
 	char *input;
 	char **split_input;
-
+	char *command;
+	
 	while(1)
 	{
 		input = readline("minishell> ");
 		split_input = ft_split(input, ' ');
+		command = get_command(input);
+		printf("\n-------\ncommand - %s\n------\n", command);
 		choose_func(split_input, envp);
 		
 		add_history(input);
@@ -33,6 +51,8 @@ int main(int argc, char **argv, char **envp)
 	}
 	return 0;
 }
+
+//echo -n -n -n -n -n -n aaaa$USER  -n mda mdamdamda $user
 
 /*
 Function: int rl_redisplay ()
