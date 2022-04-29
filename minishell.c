@@ -20,7 +20,7 @@ t_command	*get_next_cmd(t_envlist *lst)
 	}
 	if (ft_strlen(read) > 0) //если введена команда, то добавляем в историю
 		add_history(read);
-	read = __get_env(read, lst, 0); //получаем окружение для выполнения команды
+	read = get_env(read, lst, 0); //получаем окружение для выполнения команды
 	buff = args_splitter(NULL, read, 0, 0); //сплитим аргументы команды //// readline that was splitted
 	if (error_checker(buff) == false) //проверяем на ошибки (отсутствие команды после пайпа, к примеру)
 		return (NULL);
@@ -64,11 +64,11 @@ void	command_roots(t_command *command, t_envlist *lst)
 	if (command->next || command->redirection) //если есть редиректы или пайпы
 		pipe_handler(command, lst); //ловим пайпы
 	else
-		__exec__(command, lst); //иначе просто запускаем
+		execve_builtin_binary(command, lst); //иначе просто запускаем
 	g_variable.is_running = 0; //флаг в ноль
 }
 
-void	__exit(t_command *command)
+void	ft_exit(t_command *command)
 {
 	if (command && command -> program != NULL \
 		&& ft_strcmp(command -> program, "exit") == 0)
@@ -80,19 +80,19 @@ void	__exit(t_command *command)
 	return ;
 }
 
-int	main(int ac, char **av, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	t_command	*command;
 	t_envlist	*lst;
 
-	av = NULL; //(void)av/ac
-	lst = __env__init(envp); //копируем окружение в свой терминал
+	(void)argc;
+	(void)argv;
+	lst = init_env_list(envp); //копируем окружение в свой терминал
 	signal_handler(); //переопределяем сигналы
 	while (true)
 	{
-		ac = 0;
 		command = get_next_cmd(lst); //получаем команду
-		__exit(command);
+		ft_exit(command);
 		if (command) //если команда введена 
 			command_roots(command, lst);
 		free_cmd(command); //зачистка памяти

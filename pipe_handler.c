@@ -38,7 +38,7 @@ void	pipe_utils(t_command *tmp, t_envlist *lst)
 			close(fd[0]);	// закрываем запись в пайп
 		}
 		redirection_handler(tmp, lst); // обрабатываем редиректы
-		__exec__(tmp, lst); // запуск программы
+		execve_builtin_binary(tmp, lst); // запуск программы
 		exit(0);
 	}
 	close(0);

@@ -1,13 +1,6 @@
 
 #include "minishell.h"
 
-void	set_error(char *s) //сообщение об ошибке
-{
-	printf("\x1b[31m%s: command not found\n\x1b[37m", s);
-	g_variable.g_exites = 1;
-	return ;
-}
-
 char	*path_joiner(char *path, char *cmd) //соединятель пути к бинарнику
 {
 	char	*ret;
@@ -47,21 +40,54 @@ char	*is_in_list(char *cmd, char **others, char *path, int i)
 		free(others[i++]);
 	return (free(others), set_error(cmd), NULL);
 }
-//------------------------------------------------------------------------------
-// char	*args_joiner(char *args, char *new) //нахер не нужная функция, лол
-// { //можно просто снести, наверное заготовка к бонусам
-// 	char	*joined;
-// 	char	*space;
 
-// 	if (args == NULL)
-// 		return (ft_strdup(new));
-// 	space = ft_strjoin(args, " ");
-// 	joined = ft_strjoin(space, new);
-// 	free(args);
-// 	free(space);
-// 	return (joined);
-// }
-//------------------------------------------------------------------------------
+t_command	*init_cmd(char **buff)
+{
+	int			len;
+	t_command	*command;
+
+	command = NULL;
+	if (!buff || buff[0] == NULL)
+		return (NULL);
+	len = 0;
+	while (buff[len])
+		len++;
+	command = (t_command *) malloc (sizeof(t_command));
+	command -> options = NULL;
+	command -> args = (char **) malloc ((len + 1) * sizeof(char *));
+	command -> args[0] = NULL;
+	command -> program = NULL;
+	command -> next = NULL;
+	command -> redirection = NULL;
+	command -> files = NULL;
+	return (command);
+}
+
+void	gen_files(t_command *command, char *red, char *file, int *i)
+{
+	t_files	*new;
+	t_files	*tmp;
+
+	command -> redirection = ft_strdup(red);
+	*i += 1;
+	new = (t_files *) malloc (sizeof(t_files));
+	new -> is_append = false;
+	tmp = command -> files;
+	if (!ft_strcmp(red, RED_APPEND))
+		new -> is_append = true;
+	new -> file = file;
+	new -> next = NULL;
+	if (command -> files == NULL)
+	{
+		command -> files = new;
+		return ;
+	}
+	while (command -> files -> next)
+		command -> files = command -> files -> next;
+	command -> files -> next = new;
+	command -> files = tmp;
+}
+
 t_command	*get_command(char **buff, int i, int tmp, t_envlist *lst)
 // buff is a readline that was splitted by pipes, redirects, WHITE_SPACES, single and double quotes, etc..
 

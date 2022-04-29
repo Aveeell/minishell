@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-void	unset_utils(t_envlist *lst, char *tab)
+void	unset_builtin_utils(t_envlist *lst, char *tab)
 {
 	while (lst != NULL) //бежим по списку
 	{
@@ -15,7 +15,7 @@ void	unset_utils(t_envlist *lst, char *tab)
 	}
 }
 
-int	__unset(t_command *commad, t_envlist *lst)
+int	unset_builtin(t_command *commad, t_envlist *lst)
 {
 	int			tablen;
 	int			i;
@@ -28,7 +28,7 @@ int	__unset(t_command *commad, t_envlist *lst)
 	while (i < tablen) //в цикле бежим и анлинкаем
 	{
 		tmp = lst;
-		unset_utils(tmp, commad->args[i]);
+		unset_builtin_utils(tmp, commad->args[i]);
 		i++;
 	}
 	return (0);
