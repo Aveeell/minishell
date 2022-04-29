@@ -62,11 +62,11 @@ typedef struct s_command
 	t_files				*files; //файлы при редиректах
 	char				*program; //название бинарника
 	char				**args; //аргументы команды
-	struct s_command	*next; //если пайпы, то здесь следующая команда
 	char				*options; //флаги команд
 	char				**execve; //путь к бинарнику
 	int					is_append; //добавляем ли к файлу данные
 	int					heredoc; //флаг использования heredoc (при редиректе <<)
+	struct s_command	*next; //если пайпы, то здесь следующая команда
 }				t_command;
 
 typedef struct s_envlist // linked lst
@@ -79,7 +79,7 @@ typedef struct s_envlist // linked lst
 
 /*  PROTOTYPES  */
 
-t_command	*get_cammand(char **buff, int i, int tmp, t_envlist *lst);
+t_command	*get_command(char **buff, int i, int tmp, t_envlist *lst);
 t_command	*init_cmd(char **buff);
 void		free_cmd(t_command *command);
 int			__cd__(t_command *command, t_envlist *lst);
@@ -95,7 +95,7 @@ int			__export(t_envlist *lst, t_command *command);
 t_envlist	*ft_lstnew(char *s);
 t_envlist	*ft_lstlast(t_envlist *lst);
 void		ft_lstadd_back(t_envlist **lst, t_envlist *new);
-char		*exeve_handler(t_command *command, t_envlist *lst);
+char		*execve_handler(t_command *command, t_envlist *lst);
 int			signal_handler(void);
 int			ft_tab_len(char **tab);
 int			__unset(t_command *commad, t_envlist *lst);

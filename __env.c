@@ -32,7 +32,7 @@ t_envlist	*__env__init(char **envp)
 
 	lst = NULL;
 	i = 0;
-	g_variable.is_running = 0; //устанавливаем глобульные переменные в ноль
+	g_variable.is_running = 0; //устанавливаем глобальные переменные в ноль
 	g_variable.g_exites = 0;
 	if (envp[0] == NULL) //хардкодим пути, если env пустой
 	{

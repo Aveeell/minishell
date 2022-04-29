@@ -26,7 +26,7 @@ t_command	*get_next_cmd(t_envlist *lst)
 		return (NULL);
 	if (!buff || buff[0] == NULL)
 		return (NULL);
-	return (free(read), command = get_cammand(buff, -1, 0, lst), command); 
+	return (free(read), command = get_command(buff, -1, 0, lst), command); 
 	//чистим ридлайн и получаем структуру с командами и аргументами
 }
 
@@ -98,6 +98,6 @@ int	main(int ac, char **av, char **envp)
 		free_cmd(command); //зачистка памяти
 		command = NULL;
 	}
-	rl_clear_history();
+	rl_clear_history(); //Clear the history list by deleting all of the entries
 	return (0);
 }

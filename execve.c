@@ -27,7 +27,7 @@ char	**linked_double(t_envlist *lst)
 	return (buff);
 }
 
-char	*exeve_handler(t_command *command, t_envlist *lst)
+char	*execve_handler(t_command *command, t_envlist *lst)
 {
 	char	**buff;
 	int		pid;

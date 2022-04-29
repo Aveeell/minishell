@@ -62,7 +62,7 @@ char	*is_in_list(char *cmd, char **others, char *path, int i)
 // 	return (joined);
 // }
 //------------------------------------------------------------------------------
-t_command	*get_cammand(char **buff, int i, int tmp, t_envlist *lst)
+t_command	*get_command(char **buff, int i, int tmp, t_envlist *lst)
 // buff is a readline that was splitted by pipes, redirects, WHITE_SPACES, single and double quotes, etc..
 
 {
@@ -76,7 +76,7 @@ t_command	*get_cammand(char **buff, int i, int tmp, t_envlist *lst)
 		parser(command, buff, &i, &ai); //парсим входящую структуру, проверяем команды и редиректы
 		if (buff[i] && buff[i][0] == RED_PIPE && ++i)
 		{
-			command -> next = get_cammand(buff, i - 1, i, lst); //если пайп, то записываем следующую команду
+			command -> next = get_command(buff, i - 1, i, lst); //если пайп, то записываем следующую команду
 			break ;
 		}
 		if (buff[i] && ft_strchr(REDIRECTIONS, buff[i][0])) //есди редиректы, то генерим файлы //// REDIRECTIONS = ">|<"
