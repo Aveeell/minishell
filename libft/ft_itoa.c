@@ -3,91 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: majjig <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/18 17:06:37 by jerrok            #+#    #+#             */
-/*   Updated: 2021/11/15 14:59:18 by jerrok           ###   ########.fr       */
+/*   Created: 2021/11/07 16:00:06 by majjig            #+#    #+#             */
+/*   Updated: 2021/11/07 16:16:01 by majjig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char	*ft_rev_str(char *s)
+static int	ft_get_size(int nb)
 {
-	char	tmp;
-	int		i;
-	int		j;
+	int	size;
 
-	i = 0;
-	j = 0;
-	while (s[j] != '\0')
-		j++;
-	while (i < j)
+	size = 0;
+	if (nb < 0)
 	{
-		if (s[i] == '-')
-			i++;
-		j--;
-		tmp = s[i];
-		s[i] = s[j];
-		s[j] = tmp;
-		i++;
+		nb = -nb;
+		size++;
 	}
-	return (s);
+	while (nb > 9)
+	{
+		nb /= 10;
+		size++;
+	}
+	return (size + 1);
 }
 
-static int	ft_size_str(int n)
+static void	ft_itoa_fill(char *dest, int nb, int len)
 {
-	int	i;
+	int	end;
 
-	i = 0;
-	if (n == 0 || n < 0)
-		i++;
-	while (n != 0)
+	end = 0;
+	dest[len] = 0;
+	if (nb < 0)
 	{
-		n /= 10;
-		i++;
+		dest[0] = '-';
+		nb *= -1;
+		end = 1;
 	}
-	return (i);
-}
-
-static char	*ft_full_str(char *res, int n)
-{
-	int		i;
-	long	long_n;
-
-	i = 0;
-	long_n = (long)n;
-	if (long_n < 0)
+	while (len-- > end)
 	{
-		long_n = -long_n;
-		res[i] = '-';
-		i++;
+		dest[len] = nb % 10 + 48;
+		nb /= 10;
 	}
-	else if (long_n == 0)
-	{
-		res[i] = '0';
-		i++;
-	}
-	while (long_n != 0)
-	{
-		res[i] = long_n % 10 + '0';
-		long_n /= 10;
-		i++;
-	}
-	res[i] = '\0';
-	return (res);
 }
 
 char	*ft_itoa(int n)
 {
-	char	*res;
-	int		i;
+	int		len;
+	char	*buff;
 
-	i = 0;
-	res = malloc(sizeof(char) * ft_size_str(n) + 1);
-	if (!res)
-		return ((void *)0);
-	res = ft_full_str(res, n);
-	res = ft_rev_str(res);
-	return (res);
+	len = ft_get_size(n);
+	buff = (char *) malloc(len + 1);
+	if (buff == NULL)
+		return (0);
+	if (n == 0)
+		ft_strlcpy(buff, "0", 2);
+	if (n == -2147483648)
+		ft_strlcpy(buff, "-2147483648", 12);
+	else
+		ft_itoa_fill(buff, n, len);
+	return (buff);
 }

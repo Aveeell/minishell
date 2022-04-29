@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: majjig <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/12 13:40:28 by jerrok            #+#    #+#             */
-/*   Updated: 2021/10/27 11:43:32 by jerrok           ###   ########.fr       */
+/*   Created: 2021/11/07 15:46:01 by majjig            #+#    #+#             */
+/*   Updated: 2021/11/07 20:07:46 by majjig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,26 @@
 
 int	ft_atoi(const char *str)
 {
-	int					i;
-	int					neg;
-	unsigned long long	res;
+	int	i;
+	int	nb;
+	int	sign;
 
+	sign = 1;
 	i = 0;
-	res = 0;
-	neg = 1;
+	nb = 0;
 	while ((str[i] >= '\t' && str[i] <= '\r') || str[i] == ' ')
 		i++;
 	if (str[i] == '-')
-		neg = -1;
-	if (neg == -1 || str[i] == '+')
+	{
+		sign = -1;
+		i++;
+	}
+	else if (str[i] == '+')
 		i++;
 	while (str[i] >= '0' && str[i] <= '9')
 	{
-		res = (res * 10) + (str[i] - '0');
+		nb = (str[i] - '0') + (nb * 10);
 		i++;
 	}
-	if (res > 9223372036854775807ULL)
-	{
-		if (neg == 1)
-			return (-1);
-		return (0);
-	}
-	return ((int)res * neg);
+	return (nb * sign);
 }

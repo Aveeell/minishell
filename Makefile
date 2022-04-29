@@ -1,37 +1,38 @@
 NAME = minishell
-
 LIBFT = libft/libft.a
+INC = minishell.h
+CFLAGS = -Wall -Wextra -Werror
+RM = rm -rf
+CC = cc
 
-CFLAGS = -Wall -Werror -Wextra
+FILES = minishell.c get_cmd.c command_init.c exec.c cd.c cwd.c __echo.c __env.c list_lib.c __export.c \
+		args_splitter.c sig_handler.c execve.c __unset.c split.c quotes.c \
+		files.c get_execve.c error_handler.c getenv.c pipe_handler.c redirection_handler.c \
+		parser.c is_builtin.c str_join.c free_lst.c
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
-SRCS =	main.c\
-		parse.c\
-		programs.c\
-		binary.c\
-		# signals.c\
-
-OBJS = $(SRCS:.c=.o) ./libft/libft.a
+OBJS = $(FILES:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	$(MAKE) -C ./libft
-	cp $(LIBFT) $(NAME)
-	$(CC) $(CFLAGS) -lreadline $(OBJS) -o $(NAME)
+$(NAME): $(OBJS) $(LIBFT)
+	@$(CC)  $(OBJS) $(LIBFT) -L$(shell brew --prefix readline)/lib -lreadline -o $(NAME)
+	@echo "minishell created"
 
-$(OBJS): minishell.h Makefile ./libft/*.c ./libft/*.h ./libft/Makefile
+$(LIBFT):
+	@make bonus -C libft
+
+%.o:%.c $(INC)
+	@$(CC) $(CFLAGS) -I$(shell brew --prefix readline)/include -c $< -o $@ -I $(INC)
+	@echo "compiling minishell ..."
 
 clean:
-	$(MAKE) clean -C ./libft
-	rm -f $(OBJS)
+	@$(RM) $(OBJS)
+	@make clean -C libft
+	@echo "successfuly cleaned"
 
-fclean:	clean
-	$(MAKE) fclean -C ./libft
-	rm -f $(NAME)
+fclean: clean
+	@$(RM) $(NAME)
+	@make fclean -C libft
+	@echo "executable removed successfuly"
 
 re: fclean all
-
-.PHONY: all clean fclean re

@@ -3,32 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: majjig <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/12 13:41:12 by jerrok            #+#    #+#             */
-/*   Updated: 2021/10/27 18:08:27 by jerrok           ###   ########.fr       */
+/*   Created: 2021/11/07 16:08:51 by majjig            #+#    #+#             */
+/*   Updated: 2021/11/09 19:46:19 by majjig           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strnstr(char const *str, char const *substr, size_t n)
+static int	ft_check_is_here(char *str, char *to, size_t len)
 {
 	size_t	i;
-	size_t	j;
 
 	i = 0;
-	if (!substr[0])
-		return ((char *)str);
-	while (str[i] && i < n)
+	while (to[i])
 	{
-		j = 0;
-		while (str[i + j] && substr[j] && \
-				n > (i + j) && str[i + j] == substr[j])
-			j++;
-		if (!substr[j])
-			return ((char *)&str[i]);
+		if (str[i] != to[i] || len-- == 0)
+			return (0);
 		i++;
 	}
-	return ((void *)0);
+	return (1);
+}
+
+char	*ft_strnstr(const char	*big, const char *little, size_t len)
+{
+	size_t	i;
+	char	*str;
+	char	*to_find;
+
+	i = 0;
+	str = (char *) big;
+	to_find = (char *) little;
+	if (!to_find[i] || big == little)
+		return (str);
+	while (str[i] && i < len)
+	{
+		if (str[i] == *to_find)
+			if (ft_check_is_here(&str[i], to_find, len - i))
+				return (str + i);
+		i++;
+	}
+	return (0);
 }
