@@ -3,34 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: majjig <majjig@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mkoch <mkoch@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/07 16:09:51 by majjig            #+#    #+#             */
-/*   Updated: 2022/03/25 20:56:23 by majjig           ###   ########.fr       */
+/*   Created: 2021/10/22 16:23:26 by mkoch             #+#    #+#             */
+/*   Updated: 2021/11/09 14:53:27 by mkoch            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+static int	ft_isequal(char c, char *set)
+{
+	int	i;
+
+	i = 0;
+	while (set[i] != '\0')
+	{
+		if (set[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	char	*s;
-	char	*str;
-	int		start;
-	int		end;
+	char	*res;
+	size_t	i;
+	size_t	end;
 
-	s = (char *) s1;
-	start = 0;
-	if (set == NULL || s == NULL)
+	if (s1 == NULL)
 		return (NULL);
-	end = ft_strlen(s) - 1;
-	while (ft_strrchr(set, s[start]) && end >= start)
-		start++;
-	while (ft_strrchr(set, s[end]) && end >= start)
+	if (set == NULL)
+		return ((char *)s1);
+	i = 0;
+	while ((ft_isequal(s1[i], (char *)set)) && (s1[i]))
+		i++;
+	end = ft_strlen(s1) - 1;
+	while ((ft_isequal(s1[end], (char *)set)) && (end > i))
 		end--;
-	str = (char *) malloc(end - start + 2);
-	if (str == NULL)
-		return (NULL);
-	ft_strlcpy(str, &s[start], end - start + 2);
-	return (str);
+	end = end + 1;
+	if (end <= i)
+	{
+		res = (char *)malloc(sizeof(char));
+		if (res == NULL)
+			return (NULL);
+		res[0] = '\0';
+		return (res);
+	}
+	res = ft_substr(s1, i, (end - i));
+	return (res);
 }

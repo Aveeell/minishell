@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: mkoch <mkoch@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 01:43:42 by majjig            #+#    #+#             */
-/*   Updated: 2022/04/29 11:45:41 by jerrok           ###   ########.fr       */
+/*   Updated: 2022/04/29 12:26:50 by mkoch            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,14 @@ char	*is_in_list(char *cmd, char **others, char *path, int i)
 // }
 //------------------------------------------------------------------------------
 t_command	*get_cammand(char **buff, int i, int tmp, t_envlist *lst)
+// buff is a readline that was splitted by pipes, redirects, WHITE_SPACES, single and double quotes, etc..
+
 {
 	t_command	*command;
 	int			ai;
 
 	ai = 0;
-	command = init_cmd(buff); //инициализируем структуру
+	command = init_cmd(buff); //инициализируем структуру // // set fields in command structure to NULL and mallocs memory
 	while (buff[++i])
 	{
 		parser(command, buff, &i, &ai); //парсим входящую структуру, проверяем команды и редиректы
@@ -88,7 +90,7 @@ t_command	*get_cammand(char **buff, int i, int tmp, t_envlist *lst)
 			command -> next = get_cammand(buff, i - 1, i, lst); //если пайп, то записываем следующую команду
 			break ;
 		}
-		if (buff[i] && ft_strchr(REDIRECTIONS, buff[i][0])) //есди редиректы, то генерим файлы
+		if (buff[i] && ft_strchr(REDIRECTIONS, buff[i][0])) //есди редиректы, то генерим файлы //// REDIRECTIONS = ">|<"
 			gen_files(command, buff[i], buff[i + 1], &i);
 		else if (buff[i] && !command -> program)
 		{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: mkoch <mkoch@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 01:18:03 by iidkhebb          #+#    #+#             */
-/*   Updated: 2022/04/28 13:14:05 by jerrok           ###   ########.fr       */
+/*   Updated: 2022/04/28 18:00:09 by mkoch            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ char	**linked_double(t_envlist *lst)
 	tmp = lst;
 	while (tmp)
 	{
-		len++;
-		tmp = tmp -> next;
+		len++; //определяем длину списка с переменными окружения
+		tmp = tmp -> next; 
 	}
-	buff = (char **) malloc ((len + 1) * sizeof(char *));
+	buff = (char **) malloc ((len + 1) * sizeof(char *)); //маллочим память под двумерный массив
 	len = 0;
 	while (lst)
 	{
-		buff[len++] = lst -> stock;
+		buff[len++] = lst -> stock; // строка в формате "перем. окружения = значение"
 		lst = lst -> next;
 	}
 	buff[len] = NULL;
@@ -42,23 +42,29 @@ char	*exeve_handler(t_command *command, t_envlist *lst)
 {
 	char	**buff;
 	int		pid;
-	int		exits;
+	int		exit_status;
 	int		i;
 
 	i = 0;
-	buff = linked_double(lst);
-	pid = fork();
+	buff = linked_double(lst); //buff = массив строк в формате "перем. окружения = значение"
+	pid = fork(); // запускаем дочерний процесс для запуска бинарника
 	if (pid == 0)
-		execve(command -> program, command->execve, buff);
-	wait(&exits);
-	if (WIFSIGNALED(exits))
+		execve(command -> program, command -> execve, buff); 
+		//char	*program - команда; char **execve - ??; buff - двумерный массив переменных окружения
+	wait(&exit_status); // pid_t wait(int *status);
+	if (WIFSIGNALED(exit_status)) //возвращает истинное значение, если дочерний процесс завершился из-за необработанного сигнала
 	{
-		if (WTERMSIG(exits) != 13)
-			g_variable.g_exites = 128 + WTERMSIG(exits);
-		if (WTERMSIG(exits) == SIGQUIT)
+		if (WTERMSIG(exit_status) != 13) //возвращает номер сигнала, который привел к завершению дочернего процесса. 
+								   //Этот макрос можно использовать, только если WIFSIGNALED вернул ненулевое значение.
+								   //13 - SIGPIPE - Terminate - Write on a pipe with no one to read it
+			g_variable.g_exites = 128 + WTERMSIG(exit_status);
+		if (WTERMSIG(exit_status) == SIGQUIT)
 			printf(" Quit\n");
 	}
 	else
-		g_variable.g_exites = WEXITSTATUS(exits);
+		g_variable.g_exites = WEXITSTATUS(exit_status); 
+		// WEXITSTATUS(status) возвращает восемь младших битов значения, которое вернул завершившийся дочерний процесс. 
+		// Эти биты могли быть установлены в аргументе функции exit() или в аргументе оператора return функции main(). 
+		// Этот макрос можно использовать, только если WIFEXITED вернул ненулевое значение. (!!!!!)
 	return (free(buff), NULL);
 }

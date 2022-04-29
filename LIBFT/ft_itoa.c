@@ -3,66 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: majjig <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: mkoch <mkoch@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/07 16:00:06 by majjig            #+#    #+#             */
-/*   Updated: 2021/11/07 16:16:01 by majjig           ###   ########.fr       */
+/*   Created: 2021/10/26 16:45:35 by mkoch             #+#    #+#             */
+/*   Updated: 2021/10/26 18:16:48 by mkoch            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_get_size(int nb)
+static size_t	ft_nlen(int n)
 {
-	int	size;
+	size_t	i;
 
-	size = 0;
-	if (nb < 0)
+	i = 0;
+	if (n < 0)
+		i++;
+	while (n / 10 != 0)
 	{
-		nb = -nb;
-		size++;
+		i++;
+		n = n / 10;
 	}
-	while (nb > 9)
-	{
-		nb /= 10;
-		size++;
-	}
-	return (size + 1);
-}
-
-static void	ft_itoa_fill(char *dest, int nb, int len)
-{
-	int	end;
-
-	end = 0;
-	dest[len] = 0;
-	if (nb < 0)
-	{
-		dest[0] = '-';
-		nb *= -1;
-		end = 1;
-	}
-	while (len-- > end)
-	{
-		dest[len] = nb % 10 + 48;
-		nb /= 10;
-	}
+	i++;
+	return (i);
 }
 
 char	*ft_itoa(int n)
 {
-	int		len;
-	char	*buff;
+	char	*res;
+	int		i;
 
-	len = ft_get_size(n);
-	buff = (char *) malloc(len + 1);
-	if (buff == NULL)
-		return (0);
-	if (n == 0)
-		ft_strlcpy(buff, "0", 2);
 	if (n == -2147483648)
-		ft_strlcpy(buff, "-2147483648", 12);
-	else
-		ft_itoa_fill(buff, n, len);
-	return (buff);
+		return (ft_strdup("-2147483648"));
+	res = malloc (sizeof(char) * ft_nlen(n) + 1);
+	if (res == NULL)
+		return (NULL);
+	i = ft_nlen(n);
+	if (n < 0)
+	{
+		res[0] = '-';
+		n = -n;
+	}
+	res[i] = '\0';
+	i--;
+	while (n / 10 != 0)
+	{
+		res[i] = 48 + (n % 10);
+		n = n / 10;
+		i--;
+	}
+	res[i] = 48 + (n % 10);
+	return (res);
 }

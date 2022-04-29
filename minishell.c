@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jerrok <jerrok@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: mkoch <mkoch@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 01:14:03 by iidkhebb          #+#    #+#             */
-/*   Updated: 2022/04/28 15:35:36 by jerrok           ###   ########.fr       */
+/*   Updated: 2022/04/29 12:27:28 by mkoch            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_command	*get_next_cmd(t_envlist *lst)
 	if (ft_strlen(read) > 0) //если введена команда, то добавляем в историю
 		add_history(read);
 	read = __get_env(read, lst, 0); //получаем окружение для выполнения команды
-	buff = args_splitter(NULL, read, 0, 0); //сплитим аргументы команды
+	buff = args_splitter(NULL, read, 0, 0); //сплитим аргументы команды //// readline that was splitted
 	if (error_checker(buff) == false) //проверяем на ошибки (отсутствие команды после пайпа, к примеру)
 		return (NULL);
 	if (!buff || buff[0] == NULL)

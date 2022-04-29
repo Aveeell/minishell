@@ -3,45 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: majjig <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: mkoch <mkoch@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/07 16:08:51 by majjig            #+#    #+#             */
-/*   Updated: 2021/11/09 19:46:19 by majjig           ###   ########.fr       */
+/*   Created: 2021/10/19 15:06:36 by mkoch             #+#    #+#             */
+/*   Updated: 2021/10/19 17:54:26 by mkoch            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_check_is_here(char *str, char *to, size_t len)
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
 	size_t	i;
+	size_t	j;
 
+	if (!*needle)
+		return ((char *)haystack);
 	i = 0;
-	while (to[i])
+	while ((*(haystack + i) != '\0') && (i < len))
 	{
-		if (str[i] != to[i] || len-- == 0)
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-char	*ft_strnstr(const char	*big, const char *little, size_t len)
-{
-	size_t	i;
-	char	*str;
-	char	*to_find;
-
-	i = 0;
-	str = (char *) big;
-	to_find = (char *) little;
-	if (!to_find[i] || big == little)
-		return (str);
-	while (str[i] && i < len)
-	{
-		if (str[i] == *to_find)
-			if (ft_check_is_here(&str[i], to_find, len - i))
-				return (str + i);
+		if (*(haystack + i) == *needle)
+		{
+			j = 0;
+			while ((*(haystack + i + j) == *(needle + j)) && (i + j < len))
+			{
+				j++;
+				if (*(needle + j) == '\0')
+					return ((char *)(haystack + i));
+			}
+		}
 		i++;
 	}
 	return (0);

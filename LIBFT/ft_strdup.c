@@ -3,43 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: majjig <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: mkoch <mkoch@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/07 17:10:55 by majjig            #+#    #+#             */
-/*   Updated: 2021/11/07 17:11:36 by majjig           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: majjig <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/07 16:06:03 by majjig            #+#    #+#             */
-/*   Updated: 2021/11/07 16:06:06 by majjig           ###   ########.fr       */
+/*   Created: 2021/10/20 14:02:27 by mkoch             #+#    #+#             */
+/*   Updated: 2021/10/25 20:31:36 by mkoch            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strdup(char *src)
+char	*ft_strdup(const char *s1)
 {
-	char	*dest;
-	int		len;
 	int		i;
+	char	*ptr;
 
 	i = 0;
-	len = ft_strlen(src);
-	dest = (char *) malloc((len + 1) * sizeof(char));
-	if (!dest)
+	ptr = (char *)malloc(sizeof(*s1) * (ft_strlen(s1) + 1));
+	if (ptr == NULL)
 		return (NULL);
-	while (i < len)
+	while (s1[i] != '\0')
 	{
-		dest[i] = src[i];
+		ptr[i] = s1[i];
 		i++;
 	}
-	dest[i] = 0;
-	return (dest);
+	ptr[i] = '\0';
+	return (ptr);
 }
