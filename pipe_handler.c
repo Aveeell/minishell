@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pipe_handler.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: iidkhebb <iidkhebb@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/25 01:04:24 by iidkhebb          #+#    #+#             */
-/*   Updated: 2022/03/25 01:10:04 by iidkhebb         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -76,12 +65,13 @@ void	status_handler(t_command *tmp)
 	}
 }
 
-void	pipe_handler(t_command *command, t_envlist *lst)
+void	pipe_handler(t_command *command, t_envlist *lst) 
+//t_command *command - структура с данными о команде, t_envlist *lst - односвязный список переменных окружения)
 {
 	int			save_stdout;
 	t_command	*tmp;
 
-	save_stdout = dup(0);
+	save_stdout = dup(0); //int dup(int oldfd) - duplicate a file descriptor, 
 	tmp = command;
 	while (tmp)
 	{
