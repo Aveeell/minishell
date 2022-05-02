@@ -55,7 +55,7 @@ char	**export_spliter(t_command *command, int i)
 	return (out);
 }
 
-void	__export_utils(char **tab, t_envlist *lst, t_command *command)
+void	export_builtin_utils(char **tab, t_envlist *lst, t_command *command)
 {
 	t_envlist	*tmp;
 	char		*to_free;
@@ -82,7 +82,7 @@ void	__export_utils(char **tab, t_envlist *lst, t_command *command)
 	ft_lstadd_back(&lst, ft_lstnew_2(tab)); //добавляем в конец списка нашу переменную
 }
 
-int	__export(t_envlist *lst, t_command *command)
+int	export_builtin(t_envlist *lst, t_command *command)
 {
 	char	**tab;
 	int		tablen;
@@ -98,7 +98,7 @@ int	__export(t_envlist *lst, t_command *command)
 		tab = export_spliter(command, i); //сплитим аргументы сплита
 		if (!tab)
 			return (1);
-		__export_utils(tab, lst, command); //добавляем в env нашу строку
+		export_builtin_utils(tab, lst, command); //добавляем в env нашу строку
 		tablen--;
 		i++;
 		free(tab[0]);

@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-int	__cwd__(void)
+int	cwd_builtin(void)
 {
 	char	*cwd;
 /*

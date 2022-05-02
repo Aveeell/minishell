@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-int	__echo(t_command *commad)
+int	echo_builtin(t_command *commad)
 {
 	int	i;
 	int	tablen;

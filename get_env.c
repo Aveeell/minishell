@@ -96,7 +96,7 @@ char	*add_char(char *s, char c)
 	return (ret);
 }
 
-char	*__get_env(char *read, t_envlist *lst, int i)
+char	*get_env(char *read, t_envlist *lst, int i)
 {
 	char	*ret;
 	int		count1;

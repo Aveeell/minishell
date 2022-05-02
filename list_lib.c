@@ -47,3 +47,36 @@ void	ft_lstadd_back(t_envlist **lst, t_envlist *new) //добавить в ко�
 	last_node = ft_lstlast(*lst);
 	last_node->next = new;
 }
+
+t_envlist	*init_env_list(char **envp)
+{
+	int			i;
+	t_envlist	*lst;
+
+	lst = NULL;
+	i = 0;
+	g_variable.is_running = 0; //устанавливаем глобальные переменные в ноль
+	g_variable.g_exites = 0;
+	if (envp[0] == NULL) //хардкодим пути, если env пустой
+	{
+		ft_lstadd_back(&lst, ft_lstnew("PATH=/usr/local/bin:/bin:/usr/bin:."));
+		return (lst);
+	}
+	while (envp[i])
+	{
+		ft_lstadd_back(&lst, ft_lstnew(envp[i])); //копируем полностью строку в наш терминал
+		i++;
+	}
+	return (lst);
+}
+
+void	free_lst(t_envlist *lst)
+{
+	while (lst)
+	{
+		free(lst -> stock);
+		free(lst -> var_content);
+		free(lst -> var_name);
+		lst = lst -> next;
+	}
+}

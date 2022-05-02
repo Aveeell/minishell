@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-int	cd_utils(t_command *command)
+int	cd_builtin_utils(t_command *command)
 {
 	char	*user;
 	int		ret;
@@ -20,12 +20,12 @@ int	cd_utils(t_command *command)
 	return (ret);
 }
 
-int	__cd__(t_command *command, t_envlist *lst)
+int	cd_builtin(t_command *command, t_envlist *lst)
 {
 	char	*wd;
 	int		ret;
 
-	ret = cd_utils(command); //ищем нужную папку
+	ret = cd_builtin_utils(command); //ищем нужную папку
 	wd = getcwd(NULL, 0); 
 	if (ret != 0)
 	{
@@ -37,7 +37,7 @@ int	__cd__(t_command *command, t_envlist *lst)
 		free(*(command->args));
 		*(command->args) = ft_strjoin("PWD=", wd);
 		*(command->args + 1) = NULL;
-		__export(lst, command);
+		export_builtin(lst, command);
 	}
 	free(wd);
 	return (0);
