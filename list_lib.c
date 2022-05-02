@@ -57,7 +57,7 @@ t_envlist	*init_env_list(char **envp)
 	i = 0;
 	g_variable.is_running = 0; //устанавливаем глобальные переменные в ноль
 	g_variable.g_exites = 0;
-	if (envp[0] == NULL) //хардкодим пути, если env пустой
+	if (!envp[0]) //хардкодим пути, если env пустой
 	{
 		ft_lstadd_back(&lst, ft_lstnew("PATH=/usr/local/bin:/bin:/usr/bin:."));
 		return (lst);
@@ -70,13 +70,13 @@ t_envlist	*init_env_list(char **envp)
 	return (lst);
 }
 
-void	free_lst(t_envlist *lst)
-{
-	while (lst)
-	{
-		free(lst -> stock);
-		free(lst -> var_content);
-		free(lst -> var_name);
-		lst = lst -> next;
-	}
-}
+// void	free_lst(t_envlist *lst)
+// {
+// 	while (lst)
+// 	{
+// 		free(lst->stock);
+// 		free(lst->var_content);
+// 		free(lst->var_name);
+// 		lst = lst->next;
+// 	}
+// }

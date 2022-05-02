@@ -1,21 +1,21 @@
 
 #include "minishell.h"
 
-int	cwd_builtin(void)
+int	pwd_builtin(void)
 {
-	char	*cwd;
+	char	*pwd;
 /*
 При вызове функции getcwd() с параметром dir, равным NULL, функция getcwd() 
 автоматичес­ки размещает буфер с использованием функции malloc() и 
 возвращает указатель на этот буфер
 */
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
 	{
 		chdir("..");
-		cwd = getcwd(NULL, 0);
+		pwd = getcwd(NULL, 0);
 	}
-	ft_putendl_fd(cwd, STDOUT_FILENO);
-	free(cwd);
+	ft_putendl_fd(pwd, STDOUT_FILENO);
+	free(pwd);
 	return (0);
 }

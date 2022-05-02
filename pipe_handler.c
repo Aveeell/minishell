@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-void	pipe_close(t_command *tmp, int fd0, int fd1)
+static void	pipe_close(t_command *tmp, int fd0, int fd1)
 {
 	if (tmp->next)
 	{
@@ -11,14 +11,14 @@ void	pipe_close(t_command *tmp, int fd0, int fd1)
 	}
 }
 
-void	std_out_close(int save_stdout)
+static void	std_out_close(int save_stdout)
 {
 	close(0);
 	dup2(save_stdout, 0);
 	close(save_stdout);
 }
 
-void	pipe_utils(t_command *tmp, t_envlist *lst)
+static void	pipe_utils(t_command *tmp, t_envlist *lst)
 {
 	int	pid;
 	int	fd[2];
@@ -45,7 +45,7 @@ void	pipe_utils(t_command *tmp, t_envlist *lst)
 	pipe_close(tmp, fd[0], fd[1]);
 }
 
-void	status_handler(t_command *tmp)
+static void	status_handler(t_command *tmp)
 {
 	int			exits;
 

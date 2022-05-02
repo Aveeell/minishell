@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-char	*path_joiner(char *path, char *cmd) //соединятель пути к бинарнику
+static char	*path_joiner(char *path, char *cmd) //соединятель пути к бинарнику
 {
 	char	*ret;
 	char	*slash;
@@ -12,14 +12,14 @@ char	*path_joiner(char *path, char *cmd) //соединятель пути к б
 	return (ret);
 }
 
-char	*is_in_list(char *cmd, char **others, char *path, int i)
+static char	*is_in_list(char *cmd, char **others, char *path, int i)
 {
 	if (is_builtin(cmd)) //является ли билтином
 		return (ft_strdup(is_builtin(cmd)));
 	if (ft_strchr(cmd, '/')) //если указан путь
 		return (ft_strdup(cmd));
 	path = getenv("PATH"); //получаем path
-	if (path == NULL)
+	if (!path)
 		return (set_error(cmd), NULL); //бросаем ошибку
 	others = ft_split(path, ':'); //сплитим по :
 	while (others[i]) //пока есть элементы
@@ -41,7 +41,7 @@ char	*is_in_list(char *cmd, char **others, char *path, int i)
 	return (free(others), set_error(cmd), NULL);
 }
 
-t_command	*init_cmd(char **buff)
+static t_command	*init_cmd(char **buff)
 {
 	int			len;
 	t_command	*command;
@@ -52,68 +52,65 @@ t_command	*init_cmd(char **buff)
 	len = 0;
 	while (buff[len])
 		len++;
-	command = (t_command *) malloc (sizeof(t_command));
-	command -> options = NULL;
-	command -> args = (char **) malloc ((len + 1) * sizeof(char *));
-	command -> args[0] = NULL;
-	command -> program = NULL;
-	command -> next = NULL;
-	command -> redirection = NULL;
-	command -> files = NULL;
+	command = malloc(sizeof(t_command));
+	command->options = NULL;
+	command->args = malloc(sizeof(char *) * len + 1);
+	command->args[0] = NULL;
+	command->program = NULL;
+	command->next = NULL;
+	command->redirection = NULL;
+	command->files = NULL;
 	return (command);
 }
 
-void	gen_files(t_command *command, char *red, char *file, int *i)
+static void	gen_files(t_command *command, char *red, char *file, int *i)
 {
 	t_files	*new;
 	t_files	*tmp;
 
-	command -> redirection = ft_strdup(red);
+	command->redirection = ft_strdup(red);
 	*i += 1;
-	new = (t_files *) malloc (sizeof(t_files));
-	new -> is_append = false;
-	tmp = command -> files;
-	if (!ft_strcmp(red, RED_APPEND))
-		new -> is_append = true;
-	new -> file = file;
-	new -> next = NULL;
-	if (command -> files == NULL)
+	new = malloc(sizeof(t_files));
+	tmp = command->files;
+	new->file = file;
+	new->next = NULL;
+	if (command->files == NULL)
 	{
-		command -> files = new;
+		command->files = new;
 		return ;
 	}
-	while (command -> files -> next)
-		command -> files = command -> files -> next;
-	command -> files -> next = new;
-	command -> files = tmp;
+	while (command->files->next)
+		command->files = command->files->next;
+	command->files->next = new;
+	command->files = tmp;
 }
 
 t_command	*get_command(char **buff, int i, int tmp, t_envlist *lst)
 // buff is a readline that was splitted by pipes, redirects, WHITE_SPACES, single and double quotes, etc..
 {
 	t_command	*command;
-	int			ai;
+	int			j;
 
-	ai = 0;
+	j = 0;
 	command = init_cmd(buff); //инициализируем структуру // // set fields in command structure to NULL and mallocs memory
 	while (buff[++i])
 	{
-		parser(command, buff, &i, &ai); //парсим входящую структуру, проверяем команды и редиректы
-		if (buff[i] && buff[i][0] == RED_PIPE && ++i)
+		parser(command, buff, &i, &j); //парсим входящую структуру, проверяем команды и редиректы
+		if (buff[i] && buff[i][0] == '|' && ++i)
 		{
-			command -> next = get_command(buff, i - 1, i, lst); //если пайп, то записываем следующую команду
+			command->next = get_command(buff, i - 1, i, lst); //если пайп, то записываем следующую команду
 			break ;
 		}
-		if (buff[i] && ft_strchr(REDIRECTIONS, buff[i][0])) //есди редиректы, то генерим файлы //// REDIRECTIONS = ">|<"
+		if (buff[i] && ft_strchr("|><", buff[i][0])) //есди редиректы, то генерим файлы //// "|><" = ">|<"
 			gen_files(command, buff[i], buff[i + 1], &i);
-		else if (buff[i] && !command -> program)
+		else if (buff[i] && !command->program)
 		{
-			command -> program = is_in_list(buff[i], NULL, NULL, 0); //проверяем наличие проги
-			if (command -> program == NULL)
+			command->program = is_in_list(buff[i], NULL, NULL, 0); //проверяем наличие проги
+			if (command->program == NULL)
 				break ;
 		}
 	}
 	if (!ft_strcmp(command->redirection, "<<")) //если есть <<, то запускаем heredoc
 		command->heredoc = heredoc(command, lst); //запускаем heredoc 
-	return (command -> execve = get_execve(buff, tmp), command); //возвращаем запускаемую команду
+	return (command->execve = get_execve(buff, tmp), command); //возвращаем запускаемую команду
 }

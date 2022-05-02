@@ -5,7 +5,7 @@ t_envlist	*ft_lstnew_2(char **s)
 {
 	t_envlist	*new;
 
-	new = (t_envlist *)malloc(sizeof(t_envlist));
+	new = malloc(sizeof(t_envlist));
 	if (!(new))
 		return (0);
 	new->var_name = ft_strdup(s[0]);
@@ -25,22 +25,21 @@ int	ft_tab_len(char **tab)
 	return (i);
 }
 
-char	**export_spliter(t_command *command, int i)
+static char	**export_spliter(t_command *command, int i)
 {
 	char	**out;
 	char	*tmp;
 
 	tmp = NULL;
 	out = NULL;
-	if (command->args[i] == NULL)
+	if (!command->args[i])
 		return (out);
-	if (ft_strchr(command->args[i], '+') == NULL)
+	if (!ft_strchr(command->args[i], '+'))
 	{
 		command->is_append = 0;
 		out = ft_split_smart(command->args[i], '='); //делим строку на название и значение по '='
-		if (!ft_isalpha(out[0][0]) && out[0][0] != '_') //если начинается с цифры или _
-			return (printf("export: `%s' : not a valid\
-			identifier\n", out[0]), NULL); //бросаем ошибку
+		if (!ft_isalpha(out[0][0])) //если начинается с цифры
+			return (printf("export: `%s': invalid param name\n", out[0]), NULL); //бросаем ошибку
 		else if (!ft_strcmp(command->args[i], out[0]))
 			return (NULL);
 	}
@@ -55,7 +54,7 @@ char	**export_spliter(t_command *command, int i)
 	return (out);
 }
 
-void	add_var_to_env(char **tab, t_envlist *lst, t_command *command)
+static void	add_var_to_env(char **tab, t_envlist *lst, t_command *command)
 {
 	t_envlist	*tmp;
 	char		*to_free;
@@ -64,7 +63,7 @@ void	add_var_to_env(char **tab, t_envlist *lst, t_command *command)
 	to_free = NULL;
 	while (tmp != NULL)
 	{
-		if (!ft_strcmp(tmp->var_name, tab[0]) && command->is_append == 0) 
+		if (!ft_strcmp(tmp->var_name, tab[0]) && !command->is_append) 
 		{
 			free(tmp->var_content);
 			tmp->var_content = ft_strdup(tab[1]);
