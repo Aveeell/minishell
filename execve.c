@@ -70,7 +70,7 @@ void	execve_builtin_binary(t_command *command, t_envlist *lst)
 	else if (ft_strcmp(command -> program, _PWD) == 0)
 		g_variable.g_exites = cwd_builtin();						//pwd
 	else if (ft_strcmp(command -> program, _ECHO) == 0)
-		g_variable.g_exites = echo_builtin(command);					//echo
+		g_variable.g_exites = echo_builtin(command);				//echo
 	else if (ft_strcmp(command -> program, _ENV) == 0)
 		g_variable.g_exites = env_builtin(lst);						//env
 	else if (ft_strcmp(command -> program, _EXPORT) == 0)

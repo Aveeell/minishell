@@ -37,7 +37,7 @@ char	**export_spliter(t_command *command, int i)
 	if (ft_strchr(command->args[i], '+') == NULL)
 	{
 		command->is_append = 0;
-		out = ft_split_smart(command->args[i], '='); //умный сплит(?)
+		out = ft_split_smart(command->args[i], '='); //делим строку на название и значение по '='
 		if (!ft_isalpha(out[0][0]) && out[0][0] != '_') //если начинается с цифры или _
 			return (printf("export: `%s' : not a valid\
 			identifier\n", out[0]), NULL); //бросаем ошибку
@@ -55,7 +55,7 @@ char	**export_spliter(t_command *command, int i)
 	return (out);
 }
 
-void	export_builtin_utils(char **tab, t_envlist *lst, t_command *command)
+void	add_var_to_env(char **tab, t_envlist *lst, t_command *command)
 {
 	t_envlist	*tmp;
 	char		*to_free;
@@ -95,10 +95,10 @@ int	export_builtin(t_envlist *lst, t_command *command)
 	tablen = ft_tab_len(command->args); //считаем кол-во строк
 	while (tablen != 0)
 	{
-		tab = export_spliter(command, i); //сплитим аргументы сплита
+		tab = export_spliter(command, i); //сплитим аргументы экспорта
 		if (!tab)
 			return (1);
-		export_builtin_utils(tab, lst, command); //добавляем в env нашу строку
+		add_var_to_env(tab, lst, command); //добавляем в env нашу строку
 		tablen--;
 		i++;
 		free(tab[0]);

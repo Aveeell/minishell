@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-int	cd_builtin_utils(t_command *command)
+int	search_directory(t_command *command)
 {
 	char	*user;
 	int		ret;
@@ -25,7 +25,7 @@ int	cd_builtin(t_command *command, t_envlist *lst)
 	char	*wd;
 	int		ret;
 
-	ret = cd_builtin_utils(command); //ищем нужную папку
+	ret = search_directory(command); //ищем нужную папку
 	wd = getcwd(NULL, 0); 
 	if (ret != 0)
 	{
