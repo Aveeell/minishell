@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-void	unset_builtin_utils(t_envlist *lst, char *tab)
+void	del_var_from_env(t_envlist *lst, char *tab)
 {
 	while (lst != NULL) //бежим по списку
 	{
@@ -28,7 +28,7 @@ int	unset_builtin(t_command *commad, t_envlist *lst)
 	while (i < tablen) //в цикле бежим и анлинкаем
 	{
 		tmp = lst;
-		unset_builtin_utils(tmp, commad->args[i]);
+		del_var_from_env(tmp, commad->args[i]);
 		i++;
 	}
 	return (0);

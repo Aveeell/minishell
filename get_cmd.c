@@ -90,7 +90,6 @@ void	gen_files(t_command *command, char *red, char *file, int *i)
 
 t_command	*get_command(char **buff, int i, int tmp, t_envlist *lst)
 // buff is a readline that was splitted by pipes, redirects, WHITE_SPACES, single and double quotes, etc..
-
 {
 	t_command	*command;
 	int			ai;

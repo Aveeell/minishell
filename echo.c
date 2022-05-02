@@ -13,7 +13,7 @@ int	echo_builtin(t_command *commad)
 		if (!commad->options) //если нет флагов
 			printf("\n");
 	}
-	else if (commad->options && !ft_strcmp(commad->options, "-n")) //если есть аргументы, и есть флаг
+	else if (commad->options && !ft_strcmp(commad->options, "-n")) //если есть флаг
 	{
 		while (i < tablen - 1) //печатаем аргументы с пробелом
 			printf("%s ", commad->args[i++]);

@@ -3,9 +3,9 @@
 
 char	*is_builtin(char *cmd) //является билтином
 {
-	static char	*all[] = {"echo", "cd", "pwd",
-		"export", "unset", "env", "exit"};
 	int			i;
+	static char	*all[] = {"echo", "cd", "pwd", "export", "unset", "env",
+		"exit"};
 
 	i = 0;
 	while (i < 7)
