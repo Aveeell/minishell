@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-t_command	*get_next_cmd(t_envlist *lst)
+static t_command	*get_next_cmd(t_envlist *lst)
 {
 	char		*read;
 	t_command	*command;
@@ -9,10 +9,7 @@ t_command	*get_next_cmd(t_envlist *lst)
 	int			i;
 
 	i = 0;
-	if (g_variable.g_exites != 0) //если флаг выхода не 1, то зеленая стрелочка
-		read = readline(MINISHELL_RED);
-	else //иначе красная
-		read = readline(MINISHELL_GREEN);
+	read = readline("\x1b[32m\033[1mMINISHELL > \x1b[37m");
 	if (!read) //если ctrl+d, то выходим
 	{
 		printf("exit");
@@ -22,43 +19,45 @@ t_command	*get_next_cmd(t_envlist *lst)
 		add_history(read);
 	read = get_env(read, lst, 0); //получаем окружение для выполнения команды
 	buff = args_splitter(NULL, read, 0, 0); //сплитим аргументы команды //// readline that was splitted
-	if (error_checker(buff) == false) //проверяем на ошибки (отсутствие команды после пайпа, к примеру)
+	if (!error_checker(buff)) //проверяем на ошибки (отсутствие команды после пайпа, к примеру)
 		return (NULL);
-	if (!buff || buff[0] == NULL)
+	if (!buff || !buff[0])
 		return (NULL);
-	return (free(read), command = get_command(buff, -1, 0, lst), command); 
+	free(read);
+	command = get_command(buff, -1, 0, lst);
+	return (command);
 	//чистим ридлайн и получаем структуру с командами и аргументами
 }
 
-void	free_cmd(t_command *command)
+static void	free_cmd(t_command *command)
 {
 	int	i;
 
 	i = 0;
 	if (!command)
 		return ;
-	free(command -> program);
-	while (command -> args && command -> args[i])
-		free(command -> args[i++]);
+	free(command->program);
+	while (command->args && command->args[i])
+		free(command->args[i++]);
 	i = 0;
-	while (command -> execve[i])
-		free(command -> execve[i++]);
-	while (command -> files)
+	while (command->execve[i])
+		free(command->execve[i++]);
+	while (command->files)
 	{
-		free(command -> files -> file);
-		free(command -> files);
-		command -> files = command -> files -> next;
+		free(command->files->file);
+		free(command->files);
+		command->files = command->files->next;
 	}
-	free(command -> execve);
-	free(command -> args);
-	free(command -> options);
-	free(command -> redirection);
+	free(command->execve);
+	free(command->args);
+	free(command->options);
+	free(command->redirection);
 	free(command);
 	command = command->next;
 	free_cmd(command);
 }
 
-void	command_roots(t_command *command, t_envlist *lst)
+static void	command_roots(t_command *command, t_envlist *lst)
 {
 	g_variable.is_running = 1; //флаг работы команды
 	if (command->next || command->redirection) //если есть редиректы или пайпы
@@ -68,10 +67,9 @@ void	command_roots(t_command *command, t_envlist *lst)
 	g_variable.is_running = 0; //флаг в ноль
 }
 
-void	ft_exit(t_command *command)
+static void	ft_exit(t_command *command)
 {
-	if (command && command -> program != NULL \
-		&& ft_strcmp(command -> program, "exit") == 0)
+	if (command && command->program && !ft_strcmp(command->program, "exit"))
 	{
 		write(1, "exit\n", 5);
 		free_cmd(command);
@@ -89,7 +87,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	lst = init_env_list(envp); //копируем окружение в свой терминал
 	signal_handler(); //переопределяем сигналы
-	while (true)
+	while (1)
 	{
 		command = get_next_cmd(lst); //получаем команду
 		ft_exit(command);

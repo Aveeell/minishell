@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-void	cltr_c(int sig) // обработчик для сигнала cltr_c(SIGINT), его код = 2
+static void	cltr_c(int sig) // обработчик для сигнала cltr_c(SIGINT), его код = 2
 {
 	printf("\n");
 	g_variable.g_exites = 128 + sig; // чтобы в  выводе было 130, как в zsh

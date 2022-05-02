@@ -1,23 +1,23 @@
 
 #include "minishell.h"
 
-char	*finder(char *find, t_envlist *lst)
+static char	*finder(char *find, t_envlist *lst)
 {
 	if (!ft_strcmp(find, "?"))
 		return (ft_itoa(g_variable.g_exites));
 	while (lst)
 	{
-		if (!ft_strcmp(find, lst -> var_name))
+		if (!ft_strcmp(find, lst->var_name))
 		{
 			free(find);
-			return (ft_strdup(lst -> var_content));
+			return (ft_strdup(lst->var_content));
 		}
-		lst = lst -> next;
+		lst = lst->next;
 	}
 	return (NULL);
 }
 
-char	*cutter(char *tofind)
+static char	*cutter(char *tofind)
 {
 	int		len;
 	char	*ret;
@@ -32,7 +32,7 @@ char	*cutter(char *tofind)
 	while (tofind[len] && (ft_isalnum(tofind[len])
 			|| tofind[len] == '_' || tofind[len] == '?'))
 		len++;
-	ret = (char *) malloc (len + 1);
+	ret = malloc(sizeof(char) * len + 1);
 	while (i < len)
 	{
 		ret[i] = tofind[i];
@@ -42,7 +42,7 @@ char	*cutter(char *tofind)
 	return (ret);
 }
 
-char	*joiner(char *s1, char *s2, t_envlist *lst)
+static char	*joiner(char *s1, char *s2, t_envlist *lst)
 {
 	int		len;
 	int		i;
@@ -56,7 +56,7 @@ char	*joiner(char *s1, char *s2, t_envlist *lst)
 		free (s2);
 		return (s1);
 	}
-	ret = (char *) malloc (ft_strlen(s1) + ft_strlen(s2) + 1);
+	ret = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 1);
 	while (s1[i])
 	{
 		ret[i] = s1[i];
@@ -71,20 +71,20 @@ char	*joiner(char *s1, char *s2, t_envlist *lst)
 	return (ret);
 }
 
-char	*add_char(char *s, char c)
+static char	*add_char(char *s, char c)
 {
 	int		i;
 	char	*ret;
 
 	i = 0;
-	if (s == NULL)
+	if (!s)
 	{
-		ret = (char *) malloc (2 * sizeof(char));
+		ret = malloc(sizeof(char) * 2);
 		ret[0] = c;
 		ret[1] = 0;
 		return (ret);
 	}
-	ret = (char *) malloc (ft_strlen(s) + 2);
+	ret = malloc(sizeof(char) * ft_strlen(s) + 2);
 	while (s[i])
 	{
 		ret[i] = s[i];
@@ -108,9 +108,9 @@ char	*get_env(char *read, t_envlist *lst, int i)
 	ret = NULL;
 	while (read[i])
 	{
-		if (read[i] == SINGLE_QUOTE && count2 % 2 == 0) //считаем кол-во кавычек
+		if (read[i] == '\'' && count2 % 2 == 0) //считаем кол-во кавычек
 			count1 ++;
-		if (read[i] == DOUBLE_QUOTE && count1 % 2 == 0)
+		if (read[i] == '\"' && count1 % 2 == 0)
 			count2 ++;
 		if (read[i] == '$' && count1 % 2 == 0) //если встречаем знак доллара
 		{
@@ -121,5 +121,6 @@ char	*get_env(char *read, t_envlist *lst, int i)
 		else
 			ret = add_char(ret, read[i++]); //собираем нашу команду посимвольно
 	}
-	return (free(read), ret);
+	free(read);
+	return (ret);
 }

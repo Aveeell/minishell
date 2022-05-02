@@ -1,22 +1,20 @@
 
 #include "minishell.h"
 
-static char	*trimmer(char *str);
-
-int	get_len(char *str)
+static int	get_len(char *str)
 {
 	int	i;
 	int	len;
 
 	i = 0;
 	len = 0;
-	if (str[i] == DOUBLE_QUOTE)
-		while (str[++i] != DOUBLE_QUOTE)
+	if (str[i] == '\"')
+		while (str[++i] != '\"')
 			len++;
-	else if (str[i] == SINGLE_QUOTE)
-		while (str[++i] != SINGLE_QUOTE)
+	else if (str[i] == '\'')
+		while (str[++i] != '\'')
 			len++;
-	else if (ft_strchr(REDIRECTIONS, str[i]))
+	else if (ft_strchr("|><", str[i]))
 	{
 		len = 1;
 		if (str[i] == str[i + 1])
@@ -24,12 +22,12 @@ int	get_len(char *str)
 	}
 	else
 		while (str[i] && !ft_strchr(WHITE_SPACES, str[i])
-			&& !ft_strchr(REDIRECTIONS, str[i]) && !ft_strchr("\"'", str[i]))
-			len += (i++ *0) + 1;
+			&& !ft_strchr("|><", str[i]) && !ft_strchr("\"'", str[i]))
+			len += (i++ * 0) + 1; //??????????????
 	return (len);
 }
 
-char	*red_as_arg(char *red)
+static char	*red_as_arg(char *str)
 {
 	char	*ret;
 	char	*tmp;
@@ -38,15 +36,15 @@ char	*red_as_arg(char *red)
 	int		len;
 
 	len = 0;
-	ret = malloc (2 * sizeof(char));
+	ret = malloc(sizeof(char) * 2);
 	ret[0] = 7; //звенит звоночек, если редирект в кавычках, можно выпилить
-	ret[1] = 0;
-	ch = red[len++];
-	while (red[len] != ch)
+	ret[1] = '\0';
+	ch = str[len++];
+	while (str[len] != ch)
 		len++;
-	tmp = (char *) malloc (len);
-	ft_strlcpy(tmp, red + 1, len);
-	tmp[len] = 0;
+	tmp = malloc(sizeof(char) * len + 1);
+	ft_strlcpy(tmp, str + 1, len);
+	tmp[len] = '\0';
 	joined = ft_strjoin(ret, tmp);
 	free(ret);
 	free(tmp);
@@ -58,21 +56,21 @@ static char	*trimmer(char *str)
 	int		i;
 	int		len;
 	char	*ret;
-	bool	is;
+	int		is;
 
 	len = get_len(str); //получем длину строки без кавычек, проблеов, редиректов
 	i = 0;
-	is = false;
-	ret = (char *) malloc (len + 1);
-	if (str[i] == SINGLE_QUOTE || str[i] == DOUBLE_QUOTE) //если видим кавычки, перекидываем флаг
-		is = true;
-	if (is && ft_strchr(REDIRECTIONS, str[i + 1])) //есди редирект в кавычках, то читаем как символ
+	is = 0;
+	ret = malloc(sizeof(char) * len + 1);
+	if (str[i] == '\'' || str[i] == '\"') //если видим кавычки, перекидываем флаг
+		is = 1;
+	if (is && ft_strchr("|><", str[i + 1])) //есди редирект в кавычках, то читаем как символ
 		return (red_as_arg(str));
 	while (i < len)
 	{
 		while (str[i + 1] == -1)
 			str++;
-		if (is == false)
+		if (!is)
 			ret[i] = str[i];
 		else if (str[i + 1] != str[0])
 			ret[i] = str[i + 1];
@@ -94,7 +92,7 @@ static int	count_words(char *str)
 	{
 		words++;
 		tmp = trimmer(str + i);
-		if (str[i] == SINGLE_QUOTE || str[i] == DOUBLE_QUOTE)
+		if (str[i] == '\'' || str[i] == '\"')
 			i += 2;
 		i += ft_strlen(tmp);
 		while (str[i] && ft_strchr(WHITE_SPACES, str[i]))
@@ -111,19 +109,19 @@ char	**args_splitter(char **ret, char *str, int i, int j)
 	if (check_quotes(str) == 0) //проверяем кавычки
 		return (NULL);
 	str = ft_strtrim(str, WHITE_SPACES); //режем спереди и сзади пробельные символы
-	ret = (char **) malloc ((count_words(str) + 1) * sizeof(char *)); //маллочим память
+	ret = malloc(sizeof(char *) * (count_words(str)) + 1); //маллочим память
 	while (str[i])
 	{
 		ret[j] = trimmer(str + i); //убираем все кавычки редиректы и прочее
-		if (str[i] == SINGLE_QUOTE || str[i] == DOUBLE_QUOTE)
+		if (str[i] == '\'' || str[i] == '\"')
 			i += 2;
 		i += ft_strlen(ret[j]);
-		while ((str[i] && !is_redirection(ret[j])
-				&& !ft_strchr(" \t\v\r\f>|<", str[i])) || j++ < 0) //пока не встретим редиректы, пайпы и пробелы
+		while ((str[i] && !is_redir(ret[j]) && !ft_strchr(DELIMS, str[i])) ||
+			j++ < 0) //пока не встретим редиректы, пайпы и пробелы
 		{
 			tmp = trimmer(str + i); //режем кавычки
 			ret[j] = strjoin_free(ret[j], tmp); //соединяем строки и чистим память
-			if (str[i] == SINGLE_QUOTE || str[i] == DOUBLE_QUOTE)
+			if (str[i] == '\'' || str[i] == '\"')
 				i += 2;
 			i += ft_strlen(tmp);
 		}

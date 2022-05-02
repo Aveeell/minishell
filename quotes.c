@@ -10,17 +10,20 @@ int	check_quotes(char	*str)
 	count2 = 0;
 	count1 = 0;
 	i = 0;
-	if (str == NULL)
+	if (!str)
 		return (0);
 	while (str[i]) //считаем кол-во
 	{
-		if (str[i] == DOUBLE_QUOTE && count1 % 2 == 0)
+		if (str[i] == '\"' && count1 % 2 == 0)
 			count2++;
-		if (str[i] == SINGLE_QUOTE && count2 % 2 == 0)
+		if (str[i] == '\'' && count2 % 2 == 0)
 			count1++;
 		i++;
 	}
 	if (count1 % 2 != 0 || count2 % 2 != 0) //нечетное => ошибка
-		return (printf("Error:\n	expected \" or '\n"), 0);
+	{
+		printf("Error: expected \" or '\n");
+		return (0);
+	}
 	return (1);
 }

@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-void	del_var_from_env(t_envlist *lst, char *tab)
+static void	del_var_from_env(t_envlist *lst, char *tab)
 {
 	while (lst != NULL) //бежим по списку
 	{

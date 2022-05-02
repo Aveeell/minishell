@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-char	**linked_double(t_envlist *lst)
+static char	**linked_double(t_envlist *lst)
 {
 	int			len;
 	t_envlist	*tmp;
@@ -14,20 +14,20 @@ char	**linked_double(t_envlist *lst)
 	while (tmp)
 	{
 		len++; //определяем длину списка с переменными окружения
-		tmp = tmp -> next; 
+		tmp = tmp->next; 
 	}
-	buff = (char **) malloc ((len + 1) * sizeof(char *)); //маллочим память под двумерный массив
+	buff = malloc(sizeof(char *) * len + 1); //маллочим память под двумерный массив
 	len = 0;
 	while (lst)
 	{
-		buff[len++] = lst -> stock; // строка в формате "перем. окружения = значение"
-		lst = lst -> next;
+		buff[len++] = lst->stock; // строка в формате "перем. окружения = значение"
+		lst = lst->next;
 	}
 	buff[len] = NULL;
 	return (buff);
 }
 
-char	*execve_handler(t_command *command, t_envlist *lst)
+static char	*execve_handler(t_command *command, t_envlist *lst)
 {
 	char	**buff;
 	int		pid;
@@ -38,7 +38,7 @@ char	*execve_handler(t_command *command, t_envlist *lst)
 	buff = linked_double(lst); //buff = массив строк в формате "перем. окружения = значение"
 	pid = fork(); // запускаем дочерний процесс для запуска бинарника
 	if (pid == 0)
-		execve(command -> program, command -> execve, buff); 
+		execve(command->program, command->execve, buff); 
 		//char	*program - команда; char **execve - ??; buff - двумерный массив переменных окружения
 	wait(&exit_status); // pid_t wait(int *status);
 	if (WIFSIGNALED(exit_status)) //возвращает истинное значение, если дочерний процесс завершился из-за необработанного сигнала
@@ -55,28 +55,28 @@ char	*execve_handler(t_command *command, t_envlist *lst)
 		// WEXITSTATUS(status) возвращает восемь младших битов значения, которое вернул завершившийся дочерний процесс. 
 		// Эти биты могли быть установлены в аргументе функции exit() или в аргументе оператора return функции main(). 
 		// Этот макрос можно использовать, только если WIFEXITED вернул ненулевое значение. (!!!!!)
-	return (free(buff), NULL);
+	free(buff);
+	return (NULL);
 }
 
-void	execve_builtin_binary(t_command *command, t_envlist *lst)
+void	execve_builtin_binary(t_command *com, t_envlist *lst)
 {
-	if (command -> program == NULL) //запуск билтинов или бинаркников
+	if (!com->program) //запуск билтинов или бинаркников
 		return ;
-	else if (ft_strchr(command -> program, '/') && \
-		access(command -> program, F_OK) == -1) //задан путь и нет доступа
-		printf("%s: file/program not found\n", command -> program);
-	else if (ft_strcmp(command -> program, _CD) == 0)
-		g_variable.g_exites = cd_builtin(command, lst);				//cd
-	else if (ft_strcmp(command -> program, _PWD) == 0)
-		g_variable.g_exites = cwd_builtin();						//pwd
-	else if (ft_strcmp(command -> program, _ECHO) == 0)
-		g_variable.g_exites = echo_builtin(command);				//echo
-	else if (ft_strcmp(command -> program, _ENV) == 0)
+	else if (ft_strchr(com->program, '/') && access(com->program, F_OK) == -1) //задан путь и нет доступа
+		printf("%s: file/program not found\n", com->program);
+	else if (!ft_strcmp(com->program, "cd"))
+		g_variable.g_exites = cd_builtin(com, lst);				//cd
+	else if (!ft_strcmp(com->program, "pwd"))
+		g_variable.g_exites = pwd_builtin();						//pwd
+	else if (!ft_strcmp(com->program, "echo"))
+		g_variable.g_exites = echo_builtin(com);				//echo
+	else if (!ft_strcmp(com->program, "env"))
 		g_variable.g_exites = env_builtin(lst);						//env
-	else if (ft_strcmp(command -> program, _EXPORT) == 0)
-		g_variable.g_exites = export_builtin(lst, command);			//export
-	else if (ft_strcmp(command -> program, _UNSET) == 0)
-		g_variable.g_exites = unset_builtin(command, lst);			//unset
-	else if (command -> program)
-		execve_handler(command, lst); //если не билтин, то вызываем бинарник
+	else if (!ft_strcmp(com->program, "export"))
+		g_variable.g_exites = export_builtin(lst, com);			//export
+	else if (!ft_strcmp(com->program, "unset"))
+		g_variable.g_exites = unset_builtin(com, lst);			//unset
+	else if (com->program)
+		execve_handler(com, lst); //если не билтин, то вызываем бинарник
 }

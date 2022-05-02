@@ -9,7 +9,7 @@ char	*is_builtin(char *cmd) //является билтином
 
 	i = 0;
 	while (i < 7)
-		if (ft_strcmp(all[i++], cmd) == 0)
+		if (!ft_strcmp(all[i++], cmd))
 			return (all[--i]);
 	return (NULL);
 }

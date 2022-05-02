@@ -9,8 +9,8 @@ static char	*ft_alloc_fill(char *src, char c)
 	i = 0;
 	while (src[i] && src[i] != c)
 		i++;
-	dest = (char *) malloc((i + 1) * sizeof(char));
-	if (dest == NULL)
+	dest = malloc(sizeof(char) * i + 1);
+	if (!dest)
 		return (NULL);
 	i = 0;
 	while (src[i] && src[i] != c) //до разделителя
@@ -30,8 +30,8 @@ static char	*ft_alloc_fill_2(char *src, char c)
 	i = 0;
 	while (src[i] && src[i] != c)
 		i++;
-	dest = (char *) malloc((i + 1) * sizeof(char));
-	if (dest == NULL)
+	dest = malloc(sizeof(char) * i + 1);
+	if (!dest)
 		return (NULL);
 	i = 0;
 	while (src[i]) //до конца строки
@@ -51,10 +51,10 @@ char	**ft_split_smart(char const *s, char c)
 
 // делит строку на три
 
-	if (s == NULL)
+	if (!s)
 		return (NULL);
 	words = 3;
-	str = (char **) malloc(words * sizeof(char *));
+	str = malloc(sizeof(char *) * words);
 	j = 0;
 	while (*s)
 	{
