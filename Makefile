@@ -2,7 +2,7 @@ NAME = minishell
 
 LIBFT = libft/libft.a
 
-CFLAGS = -Wall -Werror -Wextra -g
+CFLAGS = -Wall -Werror -Wextra
 
 HEADER = minishell.h
 
@@ -13,7 +13,8 @@ RM = rm -rf
 
 	
 SRCS =	minishell.c\
-		get_cmd.c cd.c\
+		get_cmd.c\
+		cd.c\
 		pwd.c\
 		echo.c\
 		env.c\
