@@ -20,7 +20,10 @@ static char	*is_in_list(char *cmd, char **others, char *path, int i)
 		return (ft_strdup(cmd));
 	path = getenv("PATH"); //получаем path
 	if (!path)
-		return (set_error(cmd), NULL); //бросаем ошибку
+	{
+		set_error(cmd);
+		return (NULL); //бросаем ошибку
+	}
 	others = ft_split(path, ':'); //сплитим по :
 	while (others[i]) //пока есть элементы
 	{

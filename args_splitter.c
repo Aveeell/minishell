@@ -125,7 +125,7 @@ char	**args_splitter(char **ret, char *str)
 		if (str[i] == '\'' || str[i] == '\"')
 			i += 2;
 		i += ft_strlen(ret[j]);
-			// printf("ret[0] - %s\n", ret[j]);
+			// printf("ret[0] - '%s'\n", ret[j]);
 			// printf("is_redir - %d || strchr - %d \n", is_redir(ret[j]), !ft_strchr(DELIMS, str[i]));
 		// while ((str[i] && !is_redir(ret[j]) && !ft_strchr(DELIMS, str[i]))) //пока не встретим редиректы, пайпы и пробелы
 		// {

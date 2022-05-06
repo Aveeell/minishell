@@ -25,7 +25,10 @@ static char	**export_spliter(t_command *command, int i)
 		command->is_append = 0;
 		out = ft_split_smart(command->args[i], '='); //делим строку на название и значение по '='
 		if (!ft_isalpha(out[0][0])) //если начинается с цифры
-			return (printf("export: `%s': invalid param name\n", out[0]), NULL); //бросаем ошибку
+		{
+			printf("export: `%s': invalid param name\n", out[0]);
+			return (NULL); //бросаем ошибку
+		}
 		else if (!ft_strcmp(command->args[i], out[0]))
 			return (NULL);
 	}

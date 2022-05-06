@@ -35,6 +35,12 @@ int	is_redir(char *str)
 		!ft_strcmp(str, "<<") || !ft_strcmp(str, "<"));
 }
 
+int error_return(char **buff)
+{
+	put_error(buff, 0);
+	return(0);
+}
+
 int	error_checker(char **buff)
 {
 	int	i;
@@ -43,17 +49,20 @@ int	error_checker(char **buff)
 	if (!buff)
 		return (0);
 	if (buff[0] && !ft_strcmp(buff[0], "|"))
-		return (put_error(buff, 0), 0);
+		return (error_return(buff));
 	while (buff[i])
 	{
 		if (!ft_strcmp(buff[i], "&&") || !ft_strcmp(buff[i], "||")) //заглушка, чтобы не обрабатывались как пайпы
-			return (printf("project without bonuses\n"), 0);
+		{
+			printf("project without bonuses\n");
+			return (0);
+		}
 		if (is_redir(buff[i]) && !buff[i + 1])
-			return (put_error(buff, 0), 0);
+			return (error_return(buff));
 		if (is_redir(buff[i]) && is_redir(buff[i + 1]))
 			if (!(buff[i][0] == '|' && (buff[i + 1][0] == '>'||
 				buff[i + 1][0] == '<')))
-				return (put_error(buff, 0), 0);
+				return (error_return(buff));
 		i++;
 	}
 	return (1);
