@@ -25,15 +25,12 @@ SRCS =	minishell.c\
 		execve.c\
 		unset.c\
 		split.c\
-		quotes.c\
-		get_execve.c\
 		error_handler.c\
 		get_env.c\
 		pipe_handler.c\
 		redirection_handler.c\
 		parser.c\
 		is_builtin.c\
-		str_join.c\
 
 OBJS = $(SRCS:.c=.o) ./libft/libft.a
 

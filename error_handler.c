@@ -5,7 +5,6 @@ void	set_error(char *s) //сообщение об ошибке
 {
 	printf("\x1b[31m%s: command not found\n\x1b[37m", s);
 	g_variable.g_exites = 1;
-	return ;
 }
 
 static void	put_error(char **buff, int x)

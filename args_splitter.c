@@ -136,5 +136,7 @@ char	**args_splitter(char **ret, char *str)
 		while (str[i] && ft_strchr(WHITE_SPACES, str[i])) //пока пробелы - скипаем
 			i++;
 	}
-	return (ret[j] = NULL, free(str), ret);
+	ret[j] = NULL;
+	free(str);
+	return (ret);
 }

@@ -1,20 +1,6 @@
 
 #include "minishell.h"
 
-t_envlist	*ft_lstnew_2(char **s)
-{
-	t_envlist	*new;
-
-	new = malloc(sizeof(t_envlist));
-	if (!(new))
-		return (0);
-	new->var_name = ft_strdup(s[0]);
-	new->var_content = ft_strdup(s[1]);
-	new->stock = NULL;
-	new->next = NULL;
-	return (new);
-}
-
 int	ft_tab_len(char **tab)
 {
 	int	i;

@@ -46,15 +46,13 @@ static char	*ft_alloc_fill_2(char *src, char c)
 char	**ft_split_smart(char const *s, char c)
 {
 	int		j;
-	int		words;
 	char	**str;
 
 // делит строку на три
 
 	if (!s)
 		return (NULL);
-	words = 3;
-	str = malloc(sizeof(char *) * words);
+	str = malloc(sizeof(char *) * 3);
 	j = 0;
 	while (*s)
 	{
@@ -71,5 +69,16 @@ char	**ft_split_smart(char const *s, char c)
 		}
 		s++;
 	}
-	return (str[j] = NULL, str);
+	str[j] = NULL;
+	return (str);
+}
+
+char	*strjoin_free(char *s1, char *s2)
+{
+	char	*ret;
+
+	ret = ft_strjoin(s1, s2);
+	free(s1);
+	free(s2);
+	return (ret);
 }

@@ -75,7 +75,6 @@ static void	ft_exit(t_command *command)
 		free_cmd(command);
 		exit(1);
 	}
-	return ;
 }
 
 int	main(int argc, char **argv, char **envp)

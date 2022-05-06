@@ -38,7 +38,9 @@ static char	*is_in_list(char *cmd, char **others, char *path, int i)
 	i = 0;
 	while (others[i]) //все зачищаем
 		free(others[i++]);
-	return (free(others), set_error(cmd), NULL);
+	free(others);
+	set_error(cmd);
+	return (NULL);
 }
 
 static t_command	*init_cmd(char **buff)
@@ -112,5 +114,6 @@ t_command	*get_command(char **buff, int i, int tmp, t_envlist *lst)
 	}
 	if (!ft_strcmp(command->redirection, "<<")) //если есть <<, то запускаем heredoc
 		command->heredoc = heredoc(command, lst); //запускаем heredoc 
-	return (command->execve = get_execve(buff, tmp), command); //возвращаем запускаемую команду
+	command->execve = get_execve(buff, tmp);
+	return (command); //возвращаем запускаемую команду
 }
