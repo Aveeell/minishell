@@ -52,7 +52,7 @@ typedef struct	s_envlist // linked lst
 /*  PROTOTYPES  */
 
 t_command	*get_command(char **buff, int i, int tmp, t_envlist *lst);
-char		**args_splitter(char **ret, char *s, int i, int j);
+char		**args_splitter(char **ret, char *s);
 t_envlist	*init_env_list(char **envp);
 t_envlist	*ft_lstnew(char *s);
 t_envlist	*ft_lstlast(t_envlist *lst);
@@ -63,7 +63,7 @@ char		**ft_split_smart(char const *s, char c);
 int			check_quotes(char	*str);
 char		**get_execve(char **buff, int i);
 int			error_checker(char **buff);
-char		*get_env(char *read, t_envlist *lst, int i);
+char		*get_env(char *read, t_envlist *lst);
 int			export_printer(t_envlist *lst);
 void		pipe_handler(t_command *command, t_envlist *lst);
 void		redirection_handler(t_command *command, t_envlist *lst);

@@ -15,10 +15,10 @@ static t_command	*get_next_cmd(t_envlist *lst)
 		printf("exit");
 		exit(1);
 	}
-	if (ft_strlen(read) > 0) //если введена команда, то добавляем в историю
+	if (ft_strlen(read) > 0) //если введена команда, то добавляем в историю // зачем if, если раньше был if (!read)?
 		add_history(read);
-	read = get_env(read, lst, 0); //получаем окружение для выполнения команды
-	buff = args_splitter(NULL, read, 0, 0); //сплитим аргументы команды //// readline that was splitted
+	read = get_env(read, lst); //получаем считанную readline строку, где переменные окружения уже заменены на их значение
+	buff = args_splitter(NULL, read); //сплитим аргументы команды //// readline that was splitted
 	if (!error_checker(buff)) //проверяем на ошибки (отсутствие команды после пайпа, к примеру)
 		return (NULL);
 	if (!buff || !buff[0])

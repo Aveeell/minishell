@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkoch <mkoch@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mkoch <mkoch@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 17:08:26 by mkoch             #+#    #+#             */
-/*   Updated: 2021/10/19 15:06:08 by mkoch            ###   ########.fr       */
+/*   Updated: 2022/05/06 11:13:08 by mkoch            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 
+	if (s == NULL)
+		return(0);
 	i = 0;
 	while (s[i] != '\0')
 		i++;

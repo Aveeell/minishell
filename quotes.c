@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-int	check_quotes(char	*str)
+int	check_quotes(char	*str) //str = считанная readline строка, где переменные окружения уже заменены на их значение
 {
 	int	count1;
 	int	count2;
