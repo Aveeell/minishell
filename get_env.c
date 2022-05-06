@@ -50,20 +50,21 @@ static char	*joiner(char *s1, char *s2, t_envlist *lst)
 
 	i = 0;
 	len = 0;
-	s2 = finder(s2, lst);
+	s2 = finder(s2, lst);  //ищем найденную команду в списке переменных окружения и возвращаем строку с ее значением
 	if (s2 == NULL)
 	{
 		free (s2);
 		return (s1);
 	}
 	ret = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)) + 1);
-	while (s1[i])
-	{
-		ret[i] = s1[i];
-		i++;
-	}
+	if (s1 != NULL)
+		while (s1[i]) // сначала добавляем в результат все, что было до переменной окружения
+		{
+			ret[i] = s1[i];
+			i++;
+		}
 	len = 0;
-	while (s2[len])
+	while (s2[len]) // затем добавляем значение пременной окружения
 		ret[i++] = s2[len++];
 	ret[i] = 0;
 	free(s1);
@@ -96,16 +97,18 @@ static char	*add_char(char *s, char c)
 	return (ret);
 }
 
-char	*get_env(char *read, t_envlist *lst, int i)
+char	*get_env(char *read, t_envlist *lst)
 {
 	char	*ret;
 	int		count1;
 	int		count2;
 	char	*tmp;
+	int		i;
 
 	count2 = 0;
 	count1 = 0;
 	ret = NULL;
+	i = 0;
 	while (read[i])
 	{
 		if (read[i] == '\'' && count2 % 2 == 0) //считаем кол-во кавычек
@@ -114,8 +117,8 @@ char	*get_env(char *read, t_envlist *lst, int i)
 			count2 ++;
 		if (read[i] == '$' && count1 % 2 == 0) //если встречаем знак доллара
 		{
-			tmp = cutter(&read[++i]); //выбираем именно $... 
-			i += ft_strlen(tmp);
+			tmp = cutter(&read[++i]);//выбираем именно $... возвращает строку с командой от $ до первого символа не-цифры, буквы, _ и ?
+			i += ft_strlen(tmp);// Переводим указатель на место в строке, где заканчиваеься tmp
 			ret = joiner(ret, tmp, lst); //соединяем в единую строку возвращаемое значение
 		}
 		else

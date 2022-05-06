@@ -1,31 +1,30 @@
 
 #include "minishell.h"
 
-int	echo_builtin(t_command *commad)
+int	echo_builtin(t_command *command)
 {
 	int	i;
 	int	tablen;
 
-	tablen = ft_tab_len(commad->args);
+	tablen = ft_tab_len(command->args);
 	i = 0;
-	if (!commad->args[0]) //если нет аргументов
+	if (!command->args[0] && !command->options) //если нет аргументов
+		printf("\n");
+	else if (command->options && !ft_strcmp(command->options, "-n")) //если есть флаг
 	{
-		if (!commad->options) //если нет флагов
-			printf("\n");
-	}
-	else if (commad->options && !ft_strcmp(commad->options, "-n")) //если есть флаг
-	{
+		while (!ft_strcmp(command->args[i], "-n"))
+			i++;
 		while (i < tablen - 1) //печатаем аргументы с пробелом
-			printf("%s ", commad->args[i++]);
+			printf("%s ", command->args[i++]);
 		if (tablen >= 1) //когда 1 остается печатаем без пробела
-			printf("%s", commad->args[i]);
+			printf("%s", command->args[i]);
 	}
-	else if (!commad->options && commad->args) //если нет флага и есть аргументы
+	else if (!command->options && command->args) //если нет флага и есть аргументы
 	{
 		while (i < tablen - 1)
-			printf("%s ", commad->args[i++]);
+			printf("%s ", command->args[i++]);
 		if (tablen >= 1)
-			printf("%s\n", commad->args[i]);
+			printf("%s\n", command->args[i]);
 	}
 	return (0);
 }

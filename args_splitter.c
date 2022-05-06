@@ -23,7 +23,10 @@ static int	get_len(char *str)
 	else
 		while (str[i] && !ft_strchr(WHITE_SPACES, str[i])
 			&& !ft_strchr("|><", str[i]) && !ft_strchr("\"'", str[i]))
-			len += (i++ * 0) + 1; //??????????????
+			{
+				i++;
+				len++; //инкремент i ОЧЕНЬ ТУПОЙ БЛЯ
+			}
 	return (len);
 }
 
@@ -102,11 +105,16 @@ static int	count_words(char *str)
 	return (words);
 }
 
-char	**args_splitter(char **ret, char *str, int i, int j)
+char	**args_splitter(char **ret, char *str)
+//ret = NULL, str = считанная readline строка, где переменные окружения уже заменены на их значение
 {
 	char	*tmp;
+	int		i;
+	int		j;
 
-	if (check_quotes(str) == 0) //проверяем кавычки
+	i = 0;
+	j = 0;
+	if (check_quotes(str) == 0) //возвращает 0, если нечетное количество ' or "
 		return (NULL);
 	str = ft_strtrim(str, WHITE_SPACES); //режем спереди и сзади пробельные символы
 	ret = malloc(sizeof(char *) * (count_words(str)) + 1); //маллочим память
@@ -128,5 +136,7 @@ char	**args_splitter(char **ret, char *str, int i, int j)
 		while (str[i] && ft_strchr(WHITE_SPACES, str[i])) //пока пробелы - скипаем
 			i++;
 	}
-	return (ret[j] = NULL, free(str), ret);
+	ret[j] = NULL;
+	free(str);
+	return (ret);
 }

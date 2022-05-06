@@ -12,7 +12,7 @@ int	heredoc(t_command *command, t_envlist *lst)
 		prompt = readline("\x1b[34mheredoc > \x1b[37m"); //ждем ввода
 		if (!prompt || !ft_strcmp(command->files->file, prompt)) //если ввод пустой или ввод равен command->files->file
 			return (free(prompt), close(fd[1]), fd[0]); // return(fd[0])
-		ft_putstr_fd(get_env(prompt, lst, 0), fd[1]);
+		ft_putstr_fd(get_env(prompt, lst), fd[1]);
 		ft_putstr_fd("\n", fd[1]);
 	}
 }

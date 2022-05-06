@@ -70,13 +70,16 @@ t_envlist	*init_env_list(char **envp)
 	return (lst);
 }
 
-// void	free_lst(t_envlist *lst)
-// {
-// 	while (lst)
-// 	{
-// 		free(lst->stock);
-// 		free(lst->var_content);
-// 		free(lst->var_name);
-// 		lst = lst->next;
-// 	}
-// }
+t_envlist	*ft_lstnew_2(char **s)
+{
+	t_envlist	*new;
+
+	new = malloc(sizeof(t_envlist));
+	if (!(new))
+		return (0);
+	new->var_name = ft_strdup(s[0]);
+	new->var_content = ft_strdup(s[1]);
+	new->stock = NULL;
+	new->next = NULL;
+	return (new);
+}
