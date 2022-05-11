@@ -11,17 +11,9 @@ int	ft_tab_len(char **tab)
 	return (i);
 }
 
-static void	*check_var_name(t_command *command, char **out, int i)
+static void	*print_error(char **out)
 {
-	command->is_append = 0;
-	out = split_for_export(command->args[i], '=');
-	if (!ft_isalpha(out[0][0]))
-	{
-		printf("export: `%s': invalid param name\n", out[0]);
-		return (NULL);
-	}
-	else if (!ft_strcmp(command->args[i], out[0]))
-		return (NULL);
+	printf("export: `%s': invalid param name\n", out[0]);
 	return (NULL);
 }
 
@@ -34,7 +26,14 @@ static char	**export_spliter(t_command *command, int i)
 	if (!command->args[i])
 		return (out);
 	if (!ft_strchr(command->args[i], '+'))
-		check_var_name(command, out, i);
+	{
+		command->is_append = 0;
+		out = split_for_export(command->args[i], '=');
+		if (!ft_isalpha(out[0][0]))
+			return (print_error(out));
+		else if (!ft_strcmp(command->args[i], out[0]))
+			return (NULL);
+	}
 	else if (ft_strchr(command->args[i], '+') != NULL)
 	{
 		command->is_append = 1;
