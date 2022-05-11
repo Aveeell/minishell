@@ -1,6 +1,13 @@
 
 #include "minishell.h"
 
+void	redir_and_execve(t_command *com, t_envlist *lst, char **buff, int tmp)
+{
+	if (!ft_strcmp(com->redirection, "<<"))
+		com->heredoc = heredoc(com, lst);
+	com->execve = get_execve(buff, tmp);
+}
+
 char	**get_execve(char **buff, int i)
 {
 	int		len;
@@ -9,13 +16,13 @@ char	**get_execve(char **buff, int i)
 
 	j = 0;
 	len = i;
-	while (buff[len] && !ft_strchr("|><", buff[len][0])) //# define REDIRECTIONS ">|<"
-		len ++;  // определяем длину char **buff
+	while (buff[len] && !ft_strchr("|><", buff[len][0]))
+		len ++;
 	if (!buff[len] && i == 0)
 		return (buff);
 	execve = malloc(sizeof(char *) * (len - i) + 1);
 	while (j <= len - i)
-		execve[j++] = ft_strdup(buff[i++]); // переприсваиваем строки 
+		execve[j++] = ft_strdup(buff[i++]);
 	execve[j] = NULL;
 	return (execve);
 }
@@ -32,14 +39,14 @@ static char	**linked_double(t_envlist *lst)
 	tmp = lst;
 	while (tmp)
 	{
-		len++; //определяем длину списка с переменными окружения
-		tmp = tmp->next; 
+		len++;
+		tmp = tmp->next;
 	}
-	buff = malloc(sizeof(char *) * len + 1); //маллочим память под двумерный массив
+	buff = malloc(sizeof(char *) * len + 1);
 	len = 0;
 	while (lst)
 	{
-		buff[len++] = lst->stock; // строка в формате "перем. окружения = значение"
+		buff[len++] = lst->stock;
 		lst = lst->next;
 	}
 	buff[len] = NULL;
@@ -54,48 +61,42 @@ static char	*execve_handler(t_command *command, t_envlist *lst)
 	int		i;
 
 	i = 0;
-	buff = linked_double(lst); //buff = массив строк в формате "перем. окружения = значение"
-	pid = fork(); // запускаем дочерний процесс для запуска бинарника
+	buff = linked_double(lst);
+	pid = fork();
 	if (pid == 0)
-		execve(command->program, command->execve, buff); 
-		//char	*program - команда; char **execve - ??; buff - двумерный массив переменных окружения
-	wait(&exit_status); // pid_t wait(int *status);
-	if (WIFSIGNALED(exit_status)) //возвращает истинное значение, если дочерний процесс завершился из-за необработанного сигнала
+		execve(command->program, command->execve, buff);
+	wait(&exit_status);
+	if (WIFSIGNALED(exit_status))
 	{
-		if (WTERMSIG(exit_status) != 13) //возвращает номер сигнала, который привел к завершению дочернего процесса. 
-								   //Этот макрос можно использовать, только если WIFSIGNALED вернул ненулевое значение.
-								   //13 - SIGPIPE - Terminate - Write on a pipe with no one to read it
+		if (WTERMSIG(exit_status) != 13)
 			g_variable.g_exites = 128 + WTERMSIG(exit_status);
 		if (WTERMSIG(exit_status) == SIGQUIT)
 			printf(" Quit\n");
 	}
 	else
-		g_variable.g_exites = WEXITSTATUS(exit_status); 
-		// WEXITSTATUS(status) возвращает восемь младших битов значения, которое вернул завершившийся дочерний процесс. 
-		// Эти биты могли быть установлены в аргументе функции exit() или в аргументе оператора return функции main(). 
-		// Этот макрос можно использовать, только если WIFEXITED вернул ненулевое значение. (!!!!!)
+		g_variable.g_exites = WEXITSTATUS(exit_status);
 	free(buff);
 	return (NULL);
 }
 
 void	execve_builtin_binary(t_command *com, t_envlist *lst)
 {
-	if (!com->program) //запуск билтинов или бинаркников
+	if (!com->program)
 		return ;
-	else if (ft_strchr(com->program, '/') && access(com->program, F_OK) == -1) //задан путь и нет доступа
+	else if (ft_strchr(com->program, '/') && access(com->program, F_OK) == -1)
 		printf("%s: file/program not found\n", com->program);
 	else if (!ft_strcmp(com->program, "cd"))
-		g_variable.g_exites = cd_builtin(com, lst);				//cd
+		g_variable.g_exites = cd_builtin(com, lst);
 	else if (!ft_strcmp(com->program, "pwd"))
-		g_variable.g_exites = pwd_builtin();						//pwd
+		g_variable.g_exites = pwd_builtin();
 	else if (!ft_strcmp(com->program, "echo"))
-		g_variable.g_exites = echo_builtin(com);				//echo
+		g_variable.g_exites = echo_builtin(com);
 	else if (!ft_strcmp(com->program, "env"))
-		g_variable.g_exites = env_builtin(lst);						//env
+		g_variable.g_exites = env_builtin(lst);
 	else if (!ft_strcmp(com->program, "export"))
-		g_variable.g_exites = export_builtin(lst, com);			//export
+		g_variable.g_exites = export_builtin(lst, com);
 	else if (!ft_strcmp(com->program, "unset"))
-		g_variable.g_exites = unset_builtin(com, lst);			//unset
+		g_variable.g_exites = unset_builtin(com, lst);
 	else if (com->program)
-		execve_handler(com, lst); //если не билтин, то вызываем бинарник
+		execve_handler(com, lst);
 }

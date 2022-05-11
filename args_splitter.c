@@ -9,67 +9,42 @@ static int	get_len(char *str)
 	i = 0;
 	len = 0;
 	if (str[i] == '\"')
-		while (str[++i] != '\"')
-			len++;
+		len = get_len_in_quotes(str, '\"');
 	else if (str[i] == '\'')
-		while (str[++i] != '\'')
-			len++;
+		len = get_len_in_quotes(str, '\'');
 	else if (ft_strchr("|><", str[i]))
 	{
 		len = 1;
 		if (str[i] == str[i + 1])
-			len ++;
+			len++;
 	}
 	else
-		while (str[i] && !ft_strchr(WHITE_SPACES, str[i])
-			&& !ft_strchr("|><", str[i]) && !ft_strchr("\"'", str[i]))
-			{
-				i++;
-				len++; //инкремент i ОЧЕНЬ ТУПОЙ БЛЯ
-			}
+	{
+		while (str[i] && !ft_strchr(WHITE_SPACES, str[i]) && \
+		!ft_strchr("|><", str[i]) && !ft_strchr("\"'", str[i]))
+		{
+			i++;
+			len++;
+		}
+	}
 	return (len);
 }
 
-static char	*red_as_arg(char *str)
-{
-	char	*ret;
-	char	*tmp;
-	char	*joined;
-	char	ch;
-	int		len;
-
-	len = 0;
-	ret = malloc(sizeof(char) * 2);
-	ret[0] = 7; //звенит звоночек, если редирект в кавычках, можно выпилить
-	ret[1] = '\0';
-	ch = str[len]; // ch  - кавычка
-	len++;
-	while (str[len] != ch) // пока не найдем вторую кавычку, считаем длину символов в кавычках
-		len++;
-	tmp = malloc(sizeof(char) * len + 1);
-	ft_strlcpy(tmp, str + 1, len); // копируем строку без кавычек (в начале и в конце)
-	tmp[len] = '\0';
-	joined = ft_strjoin(ret, tmp); // сначала звоночек, потом строка без кавычек
-	free(ret);
-	free(tmp);
-	return (joined);
-}
-
-static char	*trimmer(char *str)
+char	*trimmer(char *str)
 {
 	int		i;
 	int		len;
 	char	*ret;
 	int		is;
 
-	len = get_len(str); //получем длину строки без кавычек, проблеов, редиректов
+	len = get_len(str);
 	i = 0;
 	is = 0;
 	ret = malloc(sizeof(char) * len + 1);
-	if (str[i] == '\'' || str[i] == '\"') //если видим кавычки, перекидываем флаг
+	if (str[i] == '\'' || str[i] == '\"')
 		is = 1;
-	if (is && ft_strchr("|><", str[i + 1])) //есди редирект в кавычках, то читаем как символ
-		return (red_as_arg(str)); // возвращает строку без кавычек со звоночком в 0 элементе
+	if (is && ft_strchr("|><", str[i + 1]))
+		return (red_as_arg(str));
 	while (i < len)
 	{
 		while (str[i + 1] == -1)
@@ -81,7 +56,7 @@ static char	*trimmer(char *str)
 		i++;
 	}
 	ret[i] = 0;
-	return (ret); // строка без кавычек и EOF
+	return (ret);
 }
 
 static int	count_words(char *str)
@@ -95,7 +70,7 @@ static int	count_words(char *str)
 	while (str[i])
 	{
 		words++;
-		tmp = trimmer(str + i); // tmp = строка без кавычек и EOF
+		tmp = trimmer(str + i);
 		if (str[i] == '\'' || str[i] == '\"')
 			i += 2;
 		i += ft_strlen(tmp);
@@ -106,42 +81,48 @@ static int	count_words(char *str)
 	return (words);
 }
 
-char	**args_splitter(char **ret, char *str)
-//ret = NULL, str = считанная readline строка, где переменные окружения уже заменены на их значение
+static char	**while_in_split(char *str, char **ret, char *tmp)
 {
-	// char	*tmp;
-	int		i;
-	int		j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
-	if (check_quotes(str) == 0) //возвращает 0, если нечетное количество ' or "
-		return (NULL);
-	str = ft_strtrim(str, WHITE_SPACES); //режем спереди и сзади пробельные символы
-	ret = malloc(sizeof(char *) * (count_words(str)) + 1); //маллочим память под массив слов // count_words - количество строк без пробелов, все что в кавычках - одно слово
 	while (str[i])
 	{
-		ret[j] = trimmer(str + i); //убираем все кавычки редиректы EOF и прочее
+		ret[j] = trimmer(str + i);
 		if (str[i] == '\'' || str[i] == '\"')
 			i += 2;
 		i += ft_strlen(ret[j]);
-			// printf("ret[0] - '%s'\n", ret[j]);
-			// printf("is_redir - %d || strchr - %d \n", is_redir(ret[j]), !ft_strchr(DELIMS, str[i]));
-		// while ((str[i] && !is_redir(ret[j]) && !ft_strchr(DELIMS, str[i]))) //пока не встретим редиректы, пайпы и пробелы
-		// {
-		// 	j++;
-		// 	printf("%d - %s\n", j, ret[j]);
-		// 	tmp = trimmer(str + i); //режем кавычки
-		// 	ret[j] = strjoin_free(ret[j], tmp); //соединяем строки и чистим память
-		// 	if (str[i] == '\'' || str[i] == '\"')
-		// 		i += 2;
-		// 	i += ft_strlen(tmp);
-		// }
+		while ((str[i] && !is_redir(ret[j]) && !ft_strchr(DELIMS, str[i])))
+		{
+			j++;
+			tmp = trimmer(str + i);
+			ret[j] = strjoin_free(ret[j], tmp);
+			if (str[i] == '\'' || str[i] == '\"')
+				i += 2;
+			i += ft_strlen(tmp);
+		}
 		j++;
-		while (str[i] && ft_strchr(WHITE_SPACES, str[i])) //пока пробелы - скипаем
+		while (str[i] && ft_strchr(WHITE_SPACES, str[i]))
 			i++;
 	}
-	ret[j] = NULL;
+	return (ret);
+}
+
+char	**args_splitter(char **ret, char *str)
+{
+	char	*tmp;
+
+	tmp = NULL;
+	if (check_quotes(str) == 0)
+		return (NULL);
+	str = ft_strtrim(str, WHITE_SPACES);
+	ret = malloc(sizeof(char *) * (count_words(str)) + 1);
+	if (!ret)
+		return (NULL);
+	ret = while_in_split(str, ret, tmp);
+	ret[count_words(str)] = NULL;
 	free(str);
 	return (ret);
 }

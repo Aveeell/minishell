@@ -10,23 +10,22 @@ static t_command	*get_next_cmd(t_envlist *lst)
 
 	i = 0;
 	read = readline("MINISHELL > ");
-	if (!read) //если ctrl+d, то выходим
+	if (!read)
 	{
 		printf("exit");
 		exit(1);
 	}
-	if (ft_strlen(read) > 0) //если введена команда, то добавляем в историю // зачем if, если раньше был if (!read)?
+	if (ft_strlen(read) > 0)
 		add_history(read);
-	read = get_env(read, lst); //получаем считанную readline строку, где переменные окружения уже заменены на их значение
-	buff = args_splitter(NULL, read); //сплитим аргументы команды //// buff = readline that was splitted
-	if (!error_checker(buff)) //проверяем на ошибки (отсутствие команды после пайпа, к примеру)
+	read = get_env(read, lst);
+	buff = args_splitter(NULL, read);
+	if (!check_error(buff))
 		return (NULL);
 	if (!buff || !buff[0])
 		return (NULL);
 	free(read);
 	command = get_command(buff, -1, 0, lst);
 	return (command);
-	//чистим ридлайн и получаем структуру с командами и аргументами
 }
 
 static void	free_cmd(t_command *command)
@@ -59,12 +58,12 @@ static void	free_cmd(t_command *command)
 
 static void	command_roots(t_command *command, t_envlist *lst)
 {
-	g_variable.is_running = 1; //флаг работы команды
-	if (command->next || command->redirection) //если есть редиректы или пайпы
-		pipe_handler(command, lst); //ловим пайпы
+	g_variable.is_running = 1;
+	if (command->next || command->redirection)
+		pipe_handler(command, lst);
 	else
-		execve_builtin_binary(command, lst); //иначе просто запускаем
-	g_variable.is_running = 0; //флаг в ноль
+		execve_builtin_binary(command, lst);
+	g_variable.is_running = 0;
 }
 
 static void	ft_exit(t_command *command)
@@ -84,17 +83,17 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	lst = init_env_list(envp); //копируем окружение в свой терминал
-	signal_handler(); //переопределяем сигналы
+	lst = init_env_list(envp);
+	signal_handler();
 	while (1)
 	{
-		command = get_next_cmd(lst); //получаем команду
+		command = get_next_cmd(lst);
 		ft_exit(command);
-		if (command) //если команда введена 
+		if (command)
 			command_roots(command, lst);
-		free_cmd(command); //зачистка памяти
+		free_cmd(command);
 		command = NULL;
 	}
-	rl_clear_history(); //Clear the history list by deleting all of the entries
+	rl_clear_history();
 	return (0);
 }

@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-char	*is_builtin(char *cmd) //является билтином
+char	*is_builtin(char *cmd)
 {
 	int			i;
 	static char	*all[] = {"echo", "cd", "pwd", "export", "unset", "env",

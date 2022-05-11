@@ -1,9 +1,7 @@
 
 #include "minishell.h"
 
-// кусок бонуса из либы
-
-t_envlist	*ft_lstnew(char *s) //новый список
+t_envlist	*ft_lstnew(char *s)
 {
 	t_envlist	*new;
 	char		**out;
@@ -22,7 +20,7 @@ t_envlist	*ft_lstnew(char *s) //новый список
 	return (new);
 }
 
-t_envlist	*ft_lstlast(t_envlist *lst) //последний элемент
+t_envlist	*ft_lstlast(t_envlist *lst)
 {
 	if (!lst)
 		return (0);
@@ -33,7 +31,7 @@ t_envlist	*ft_lstlast(t_envlist *lst) //последний элемент
 	return (lst);
 }
 
-void	ft_lstadd_back(t_envlist **lst, t_envlist *new) //добавить в конец
+void	ft_lstadd_back(t_envlist **lst, t_envlist *new)
 {
 	t_envlist	*last_node;
 
@@ -55,16 +53,16 @@ t_envlist	*init_env_list(char **envp)
 
 	lst = NULL;
 	i = 0;
-	g_variable.is_running = 0; //устанавливаем глобальные переменные в ноль
+	g_variable.is_running = 0;
 	g_variable.g_exites = 0;
-	if (!envp[0]) //хардкодим пути, если env пустой
+	if (!envp[0])
 	{
 		ft_lstadd_back(&lst, ft_lstnew("PATH=/usr/local/bin:/bin:/usr/bin:."));
 		return (lst);
 	}
 	while (envp[i])
 	{
-		ft_lstadd_back(&lst, ft_lstnew(envp[i])); //копируем полностью строку в наш терминал
+		ft_lstadd_back(&lst, ft_lstnew(envp[i]));
 		i++;
 	}
 	return (lst);

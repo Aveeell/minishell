@@ -13,6 +13,8 @@ RM = rm -rf
 
 	
 SRCS =	minishell.c\
+		args_splitter.c\
+		args_splitter_utils.c\
 		get_cmd.c\
 		cd.c\
 		pwd.c\
@@ -20,11 +22,10 @@ SRCS =	minishell.c\
 		env.c\
 		list_lib.c\
 		export.c\
-		args_splitter.c\
 		sig_handler.c\
 		execve.c\
 		unset.c\
-		split.c\
+		split_for_export.c\
 		error_handler.c\
 		get_env.c\
 		pipe_handler.c\

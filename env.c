@@ -1,11 +1,21 @@
 
 #include "minishell.h"
 
-int	export_printer(t_envlist *lst)
+void	free_arr_of_paths(char **others)
+{
+	int	i;
+
+	i = 0;
+	while (others[i])
+		free(others[i++]);
+	free(others);
+}
+
+int	print_env_with_declare(t_envlist *lst)
 {
 	if (!lst)
 		return (1);
-	while (lst != NULL) //печатаем export
+	while (lst != NULL)
 	{
 		printf("declare -x %s=\"%s\"\n", lst->var_name, lst->var_content);
 		lst = lst->next;
@@ -17,11 +27,10 @@ int	env_builtin(t_envlist *lst)
 {
 	if (!lst)
 		return (1);
-	while (lst != NULL) //просто печатаем  env
+	while (lst != NULL)
 	{
 		printf("%s=%s\n", lst->var_name, lst->var_content);
 		lst = lst->next;
 	}
 	return (0);
 }
-

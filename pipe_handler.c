@@ -23,22 +23,22 @@ static void	pipe_utils(t_command *tmp, t_envlist *lst)
 	int	pid;
 	int	fd[2];
 
-	if (tmp->next) // если есть следующая команда, то открываем пайп
+	if (tmp->next)
 		pipe(fd);
-	pid = fork();  // запускаем дочерний процесс
+	pid = fork();
 	if (pid < 0)
 		perror("error\n");
-	if (pid == 0) // если это дочерний процесс
+	if (pid == 0)
 	{
-		if (tmp->next)		// если есть следующая команда
+		if (tmp->next)
 		{
-			close(1); 		// то закрываем запись в стандартный вывод
-			dup2(fd[1], 1); // int dup2(int oldfd, int newfd) - перенаправляем вывод из пайпа в стандартный вывод
-			close(fd[1]);	// закрываем чтение из пайпа
-			close(fd[0]);	// закрываем запись в пайп
+			close(1);
+			dup2(fd[1], 1);
+			close(fd[1]);
+			close(fd[0]);
 		}
-		redirection_handler(tmp, lst); // обрабатываем редиректы
-		execve_builtin_binary(tmp, lst); // запуск программы
+		redirection_handler(tmp, lst);
+		execve_builtin_binary(tmp, lst);
 		exit(0);
 	}
 	close(0);
@@ -65,18 +65,17 @@ static void	status_handler(t_command *tmp)
 	}
 }
 
-void	pipe_handler(t_command *command, t_envlist *lst) 
-//t_command *command - структура с данными о команде, t_envlist *lst - односвязный список переменных окружения)
+void	pipe_handler(t_command *command, t_envlist *lst)
 {
 	int			save_stdout;
 	t_command	*tmp;
 
-	save_stdout = dup(0); //int dup(int oldfd) - duplicate a file descriptor, save_stdout = input from terminal
-	tmp = command; // копируем ссылку на структуру комманд
+	save_stdout = dup(0);
+	tmp = command;
 	while (tmp)
 	{
-		pipe_utils(tmp, lst); // fork and execute command
-		tmp = tmp->next;	  // move to next command
+		pipe_utils(tmp, lst);
+		tmp = tmp->next;
 	}
 	tmp = command;
 	status_handler(tmp);

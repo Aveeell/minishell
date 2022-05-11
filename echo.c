@@ -8,18 +8,18 @@ int	echo_builtin(t_command *command)
 
 	tablen = ft_tab_len(command->args);
 	i = 0;
-	if (!command->args[0] && !command->options) //если нет аргументов
+	if (!command->args[0] && !command->options)
 		printf("\n");
-	else if (command->options && !ft_strcmp(command->options, "-n")) //если есть флаг
+	else if (command->options && !ft_strcmp(command->options, "-n"))
 	{
 		while (!ft_strcmp(command->args[i], "-n"))
 			i++;
-		while (i < tablen - 1) //печатаем аргументы с пробелом
+		while (i < tablen - 1)
 			printf("%s ", command->args[i++]);
-		if (tablen >= 1) //когда 1 остается печатаем без пробела
+		if (tablen >= 1)
 			printf("%s", command->args[i]);
 	}
-	else if (!command->options && command->args) //если нет флага и есть аргументы
+	else if (!command->options && command->args)
 	{
 		while (i < tablen - 1)
 			printf("%s ", command->args[i++]);
