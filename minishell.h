@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkoch <mkoch@student.21-school.ru>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/13 12:19:56 by mkoch             #+#    #+#             */
+/*   Updated: 2022/05/13 13:51:44 by mkoch            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -62,7 +73,7 @@ char		**split_for_export(char const *s, char c);
 int			check_quotes(char	*str);
 char		**get_execve(char **buff, int i);
 int			check_error(char **buff);
-char		*get_env(char *read, t_envlist *lst);
+char		*get_env(char *read, t_envlist *lst, int i);
 int			print_env_with_declare(t_envlist *lst);
 void		pipe_handler(t_command *command, t_envlist *lst);
 void		redirection_handler(t_command *command, t_envlist *lst);

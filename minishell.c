@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkoch <mkoch@student.21-school.ru>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/13 12:19:48 by mkoch             #+#    #+#             */
+/*   Updated: 2022/05/13 13:51:24 by mkoch            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -17,7 +28,7 @@ static t_command	*get_next_cmd(t_envlist *lst)
 	}
 	if (ft_strlen(read) > 0)
 		add_history(read);
-	read = get_env(read, lst);
+	read = get_env(read, lst, 0);
 	buff = args_splitter(NULL, read);
 	if (!check_error(buff))
 		return (NULL);

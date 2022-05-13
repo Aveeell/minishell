@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirection_handler.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkoch <mkoch@student.21-school.ru>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/13 12:20:20 by mkoch             #+#    #+#             */
+/*   Updated: 2022/05/13 13:51:29 by mkoch            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -16,7 +27,7 @@ int	heredoc(t_command *command, t_envlist *lst)
 			close(fd[1]);
 			return (fd[0]);
 		}
-		ft_putstr_fd(get_env(prompt, lst), fd[1]);
+		ft_putstr_fd(get_env(prompt, lst, 0), fd[1]);
 		ft_putstr_fd("\n", fd[1]);
 	}
 }

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_env.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkoch <mkoch@student.21-school.ru>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/13 12:19:25 by mkoch             #+#    #+#             */
+/*   Updated: 2022/05/13 13:51:36 by mkoch            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -92,17 +103,16 @@ static char	*add_char(char *s, char c)
 	return (ret);
 }
 
-char	*get_env(char *read, t_envlist *lst)
+char	*get_env(char *read, t_envlist *lst, int i)
 {
 	char	*ret;
 	int		count1;
 	int		count2;
 	char	*tmp;
-	int		i;
 
+	ret = NULL;
 	count1 = 0;
 	count2 = 0;
-	i = 0;
 	while (read[i])
 	{
 		if (read[i] == '\'' && count2 % 2 == 0)
